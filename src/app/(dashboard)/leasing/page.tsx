@@ -6,6 +6,7 @@ import { addMonths, addYears, format, differenceInMonths, isValid } from 'date-f
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { TableLoadingState } from '@/components/shared/LoadingState'
+import { Pagination, usePagination } from '@/components/shared/Pagination'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -129,6 +130,7 @@ export default function LeasingPage() {
 
   const [terminateId, setTerminateId] = useState<string | null>(null)
   const [terminateReason, setTerminateReason] = useState('')
+  const pagination = usePagination()
 
   useEffect(() => {
     logEvent('PAGE_VIEW', 'leasing')
@@ -170,6 +172,9 @@ export default function LeasingPage() {
   }, [])
 
   // ── Filtered + sorted leases ─────────────────────────────────────────────
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { pagination.reset() }, [searchTenant, filterStatus, filterProperty, filterDuration, sortBy])
+
   const filteredLeases = useMemo(() => {
     const query = searchTenant.trim().toLowerCase()
     const result = leases.filter((lease) => {
@@ -376,7 +381,7 @@ export default function LeasingPage() {
         )}
       </div>
 
-      <Card>
+      <Card className="pt-0">
         <CardContent className="p-0">
           <Table>
             <TableHeader>
@@ -402,7 +407,7 @@ export default function LeasingPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredLeases.map((lease) => {
+                pagination.paginate(filteredLeases).map((lease) => {
                   const tenant = tenantMap[lease.tenantId]
                   const property = properties.find((p) => p.id === lease.propertyId)
                   const unit = property?.units.find((u) => u.id === lease.unitId)
@@ -503,6 +508,15 @@ export default function LeasingPage() {
               )}
             </TableBody>
           </Table>
+          {filteredLeases.length > 10 && (
+            <Pagination
+              total={filteredLeases.length}
+              page={pagination.page}
+              pageSize={pagination.pageSize}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={(s) => { pagination.setPageSize(s); pagination.setPage(1) }}
+            />
+          )}
         </CardContent>
       </Card>
 

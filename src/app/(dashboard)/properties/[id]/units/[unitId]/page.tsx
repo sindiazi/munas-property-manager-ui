@@ -2,13 +2,13 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
-  ArrowLeft, BedDouble, Bath, Maximize2, Building2, MapPin, Calendar,
-  ChevronRight, Wrench,
+  ArrowLeft, BedDouble, Bath, Maximize2, Building2, MapPin, Calendar, ChevronRight,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { StatusBadge } from '@/components/shared/StatusBadge'
+import { Pagination, usePagination } from '@/components/shared/Pagination'
 import { propertiesApi } from '@/lib/api/properties.api'
 import { occupancyApi } from '@/lib/api/occupancy.api'
 import { maintenanceApi } from '@/lib/api/maintenance.api'
@@ -34,34 +34,33 @@ export default function UnitDetailPage() {
   const [unit, setUnit] = useState<PropertyUnit | null>(null)
   const [occupancy, setOccupancy] = useState<OccupancyRecord[]>([])
   const [tenantMap, setTenantMap] = useState<Record<string, Tenant>>({})
-  const [maintenanceMap, setMaintenanceMap] = useState<Record<string, MaintenanceRecord[]>>({})
+  const [maintenance, setMaintenance] = useState<MaintenanceRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const occupancyPagination = usePagination()
 
   useEffect(() => {
     async function load() {
       try {
-        const [prop, history] = await Promise.all([
+        const [prop, history, maintenanceRecords] = await Promise.all([
           propertiesApi.getById(propertyId),
           occupancyApi.getUnitHistory(unitId),
+          maintenanceApi.getByUnit(unitId).catch(() => [] as MaintenanceRecord[]),
         ])
 
         const foundUnit = prop.units?.find((u) => u.id === unitId) ?? null
         setProperty(prop)
         setUnit(foundUnit)
         setOccupancy(history)
+        setMaintenance(maintenanceRecords)
 
-        if (history.length > 0) {
-          const uniqueTenantIds = [...new Set(history.map((r) => r.tenantId))]
-          const [tenantsData, ...maintenanceResults] = await Promise.all([
-            tenantsApi.getAll(),
-            ...uniqueTenantIds.map((tid) =>
-              maintenanceApi.getByTenant(tid).catch(() => [] as MaintenanceRecord[])
-            ),
-          ])
+        // Collect unique tenant IDs from both occupancy and maintenance records
+        const tenantIds = new Set([
+          ...history.map((r) => r.tenantId),
+          ...maintenanceRecords.map((r) => r.tenantId),
+        ])
+        if (tenantIds.size > 0) {
+          const tenantsData = await tenantsApi.getAll()
           setTenantMap(Object.fromEntries(tenantsData.map((t) => [t.id, t])))
-          setMaintenanceMap(
-            Object.fromEntries(uniqueTenantIds.map((tid, i) => [tid, maintenanceResults[i]]))
-          )
         }
       } catch {
         toast.error('Failed to load unit details')
@@ -188,10 +187,10 @@ export default function UnitDetailPage() {
             </CardContent>
           </Card>
         ) : (
-          <Card>
+          <Card className="pt-0">
             <CardContent className="p-0">
               <table className="w-full text-sm">
-                <thead>
+                <thead className="bg-muted/50">
                   <tr className="border-b text-xs text-muted-foreground uppercase tracking-wide">
                     <th className="px-4 py-3 text-left font-medium">Tenant</th>
                     <th className="px-4 py-3 text-left font-medium">Period</th>
@@ -200,7 +199,7 @@ export default function UnitDetailPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...occupancy].reverse().map((record) => {
+                  {occupancyPagination.paginate(occupancy).map((record) => {
                     const tenant = tenantMap[record.tenantId]
                     return (
                       <tr
@@ -231,6 +230,15 @@ export default function UnitDetailPage() {
                   })}
                 </tbody>
               </table>
+              {occupancy.length > 10 && (
+                <Pagination
+                  total={occupancy.length}
+                  page={occupancyPagination.page}
+                  pageSize={occupancyPagination.pageSize}
+                  onPageChange={occupancyPagination.setPage}
+                  onPageSizeChange={(s) => { occupancyPagination.setPageSize(s); occupancyPagination.setPage(1) }}
+                />
+              )}
             </CardContent>
           </Card>
         )}
@@ -239,75 +247,65 @@ export default function UnitDetailPage() {
       {/* Maintenance History */}
       <section>
         <h2 className="text-base font-semibold mb-3">Maintenance History</h2>
-        {Object.keys(maintenanceMap).length === 0 ? (
+        {maintenance.length === 0 ? (
           <Card>
             <CardContent className="py-10 text-center text-muted-foreground text-sm">
               No maintenance records for this unit.
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-4">
-            {Object.entries(maintenanceMap).map(([tenantId, records]) => {
-              const tenant = tenantMap[tenantId]
-              if (!records.length) return null
-              return (
-                <Card key={tenantId}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2">
-                      <Wrench className="h-4 w-4 text-muted-foreground" />
-                      <CardTitle className="text-sm font-medium">
-                        {tenant ? `${tenant.firstName} ${tenant.lastName}` : tenantId.slice(0, 8) + '…'}
-                      </CardTitle>
-                      <span className="text-xs text-muted-foreground">({records.length} record{records.length !== 1 ? 's' : ''})</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b text-xs text-muted-foreground uppercase tracking-wide">
-                          <th className="px-4 py-2 text-left font-medium">Title</th>
-                          <th className="px-4 py-2 text-left font-medium">Status</th>
-                          <th className="px-4 py-2 text-left font-medium">Priority</th>
-                          <th className="px-4 py-2 text-left font-medium">Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {records.map((r) => (
-                          <tr key={r.id} className="border-b last:border-0">
-                            <td className="px-4 py-2.5 font-medium">
-                              {r.problemDescription}
-                              {r.resolutionNotes && (
-                                <p className="text-xs text-muted-foreground font-normal mt-0.5 line-clamp-1">
-                                  {r.resolutionNotes}
-                                </p>
-                              )}
-                            </td>
-                            <td className="px-4 py-2.5">
-                              <MaintenanceStatusBadge status={r.status} />
-                            </td>
-                            <td className="px-4 py-2.5 text-muted-foreground capitalize text-xs">
-                              {r.priority?.toLowerCase() ?? '—'}
-                            </td>
-                            <td className="px-4 py-2.5 text-muted-foreground">
-                              <div className="flex items-center gap-1">
-                                <Calendar className="h-3 w-3" />
-                                {safeFormat(r.requestedAt, 'MMM d, yyyy')}
-                              </div>
-                              {r.completedAt && (
-                                <p className="text-xs text-green-600 mt-0.5">
-                                  Completed {safeFormat(r.completedAt, 'MMM d, yyyy')}
-                                </p>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
+          <Card className="pt-0">
+            <CardContent className="p-0">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/50">
+                  <tr className="border-b text-xs text-muted-foreground uppercase tracking-wide">
+                    <th className="px-4 py-3 text-left font-medium">Description</th>
+                    <th className="px-4 py-3 text-left font-medium">Tenant</th>
+                    <th className="px-4 py-3 text-left font-medium">Status</th>
+                    <th className="px-4 py-3 text-left font-medium">Priority</th>
+                    <th className="px-4 py-3 text-left font-medium">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {maintenance.map((r) => {
+                    const tenant = tenantMap[r.tenantId]
+                    return (
+                      <tr key={r.id} className="border-b last:border-0">
+                        <td className="px-4 py-2.5 font-medium">
+                          {r.problemDescription}
+                          {r.resolutionNotes && (
+                            <p className="text-xs text-muted-foreground font-normal mt-0.5 line-clamp-1">
+                              {r.resolutionNotes}
+                            </p>
+                          )}
+                        </td>
+                        <td className="px-4 py-2.5 text-muted-foreground">
+                          {tenant ? `${tenant.firstName} ${tenant.lastName}` : '—'}
+                        </td>
+                        <td className="px-4 py-2.5">
+                          <MaintenanceStatusBadge status={r.status} />
+                        </td>
+                        <td className="px-4 py-2.5 text-muted-foreground capitalize text-xs">
+                          {r.priority?.toLowerCase() ?? '—'}
+                        </td>
+                        <td className="px-4 py-2.5 text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {safeFormat(r.requestedAt, 'MMM d, yyyy')}
+                          </div>
+                          {r.completedAt && (
+                            <p className="text-xs text-green-600 mt-0.5">
+                              Completed {safeFormat(r.completedAt, 'MMM d, yyyy')}
+                            </p>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </CardContent>
+          </Card>
         )}
       </section>
     </div>
@@ -329,3 +327,4 @@ function MaintenanceStatusBadge({ status }: { status: string }) {
     </span>
   )
 }
+

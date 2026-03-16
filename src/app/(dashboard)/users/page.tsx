@@ -4,6 +4,8 @@ import { Plus, UserCog, Shield } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { TableLoadingState } from '@/components/shared/LoadingState'
+
+import { Pagination, usePagination } from '@/components/shared/Pagination'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -112,6 +114,8 @@ export default function UsersPage() {
     }
   }
 
+  const pagination = usePagination()
+
   if (currentUser?.role !== 'ADMIN') {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-muted-foreground">
@@ -134,7 +138,7 @@ export default function UsersPage() {
         }
       />
 
-      <Card>
+      <Card className="pt-0">
         <CardContent className="p-0">
           <Table>
             <TableHeader>
@@ -158,7 +162,7 @@ export default function UsersPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                users.map((u) => (
+                pagination.paginate(users).map((u) => (
                   <TableRow key={u.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -217,6 +221,15 @@ export default function UsersPage() {
               )}
             </TableBody>
           </Table>
+          {users.length > 10 && (
+            <Pagination
+              total={users.length}
+              page={pagination.page}
+              pageSize={pagination.pageSize}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={(s) => { pagination.setPageSize(s); pagination.setPage(1) }}
+            />
+          )}
         </CardContent>
       </Card>
 

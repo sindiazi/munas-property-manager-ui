@@ -5,6 +5,7 @@ import { Plus, Users, Mail, Phone, Search } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { TableLoadingState } from '@/components/shared/LoadingState'
+import { Pagination, usePagination } from '@/components/shared/Pagination'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -17,10 +18,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { tenantsApi } from '@/lib/api/tenants.api'
 import type { RegisterTenantCommand } from '@/lib/api/tenants.api'
+import { leasesApi } from '@/lib/api/leases.api'
+import { propertiesApi } from '@/lib/api/properties.api'
 import { useAuthStore } from '@/store'
 import { useEventLogger } from '@/hooks/useEventLogger'
 import { toast } from 'sonner'
-import type { Tenant } from '@/types'
+import type { Tenant, Lease, Property } from '@/types'
 import { format } from 'date-fns'
 
 const emptyForm: RegisterTenantCommand = {
@@ -36,17 +39,32 @@ export default function TenantsPage() {
   const logEvent = useEventLogger()
   const { user } = useAuthStore()
   const [tenants, setTenants] = useState<Tenant[]>([])
+  const [activeLeaseMap, setActiveLeaseMap] = useState<Map<string, Lease>>(new Map())
+  const [propertyMap, setPropertyMap] = useState<Map<string, Property>>(new Map())
   const [search, setSearch] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const pagination = usePagination()
   const [showDialog, setShowDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setForm] = useState<RegisterTenantCommand>(emptyForm)
 
   useEffect(() => {
     logEvent('PAGE_VIEW', 'tenants')
-    tenantsApi
-      .getAll()
-      .then(setTenants)
+    Promise.all([
+      tenantsApi.getAll(),
+      leasesApi.getAll().catch(() => [] as Lease[]),
+      propertiesApi.getAll().catch(() => [] as Property[]),
+    ])
+      .then(([tenantsData, leasesData, propertiesData]) => {
+        setTenants(tenantsData)
+        // One active lease per tenant (most recent wins if somehow multiple)
+        const leaseMap = new Map<string, Lease>()
+        for (const lease of leasesData) {
+          if (lease.status === 'ACTIVE') leaseMap.set(lease.tenantId, lease)
+        }
+        setActiveLeaseMap(leaseMap)
+        setPropertyMap(new Map(propertiesData.map((p) => [p.id, p])))
+      })
       .catch(() => toast.error('Failed to load tenants'))
       .finally(() => setIsLoading(false))
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,11 +90,13 @@ export default function TenantsPage() {
   const canCreate = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
 
   const filteredTenants = useMemo(() => {
+    pagination.reset()
     const query = search.trim().toLowerCase()
     if (!query) return tenants
     return tenants.filter((t) =>
       `${t.firstName} ${t.lastName}`.toLowerCase().includes(query)
     )
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tenants, search])
 
   return (
@@ -105,29 +125,34 @@ export default function TenantsPage() {
         </div>
       </div>
 
-      <Card>
+      <Card className="pt-0">
         <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-28">Status</TableHead>
                 <TableHead>Name</TableHead>
+                <TableHead>Rented Unit</TableHead>
                 <TableHead>Contact Info</TableHead>
                 <TableHead>Registered</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {isLoading ? (
-                <TableLoadingState rows={5} cols={4} />
+                <TableLoadingState rows={5} cols={5} />
               ) : filteredTenants.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-12 text-muted-foreground">
+                  <TableCell colSpan={5} className="text-center py-12 text-muted-foreground">
                     <Users className="h-8 w-8 mx-auto mb-2 opacity-30" />
                     <p>{search ? 'No tenants match your search' : 'No tenants registered yet'}</p>
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredTenants.map((tenant) => (
+                pagination.paginate(filteredTenants).map((tenant) => {
+                  const activeLease = activeLeaseMap.get(tenant.id)
+                  const property = activeLease ? propertyMap.get(activeLease.propertyId) : undefined
+                  const unit = property?.units?.find((u) => u.id === activeLease?.unitId)
+                  return (
                   <TableRow
                     key={tenant.id}
                     className="cursor-pointer hover:bg-muted/50"
@@ -146,6 +171,19 @@ export default function TenantsPage() {
                         </span>
                       </div>
                     </TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      {property && unit ? (
+                        <button
+                          className="flex flex-col gap-0.5 text-left hover:opacity-75 transition-opacity"
+                          onClick={() => router.push(`/properties/${activeLease!.propertyId}/units/${activeLease!.unitId}`)}
+                        >
+                          <span className="text-sm font-medium">{property.name}</span>
+                          <span className="text-xs text-muted-foreground">Unit {unit.unitNumber}</span>
+                        </button>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">—</span>
+                      )}
+                    </TableCell>
                     <TableCell>
                       <div className="flex flex-col gap-1 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1.5">
@@ -162,10 +200,19 @@ export default function TenantsPage() {
                       {format(new Date(tenant.registeredAt), 'MMM d, yyyy')}
                     </TableCell>
                   </TableRow>
-                ))
+                )})
               )}
             </TableBody>
           </Table>
+          {filteredTenants.length > 10 && (
+            <Pagination
+              total={filteredTenants.length}
+              page={pagination.page}
+              pageSize={pagination.pageSize}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={(s) => { pagination.setPageSize(s); pagination.setPage(1) }}
+            />
+          )}
         </CardContent>
       </Card>
 

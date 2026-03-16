@@ -4,6 +4,7 @@ import { Plus, CreditCard, ArrowUpDown, X } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { TableLoadingState } from '@/components/shared/LoadingState'
+import { Pagination, usePagination } from '@/components/shared/Pagination'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -176,6 +177,9 @@ export default function PaymentsPage() {
     }
   }
 
+  const pagination = usePagination()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { pagination.reset() }, [filterStatus, filterProperty, sortBy])
   const canManage = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
   const colCount = canManage ? 8 : 7
 
@@ -257,7 +261,7 @@ export default function PaymentsPage() {
         )}
       </div>
 
-      <Card>
+      <Card className="pt-0">
         <CardContent className="p-0">
           <Table>
             <TableHeader>
@@ -282,7 +286,7 @@ export default function PaymentsPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredAndSorted.map((payment) => {
+                pagination.paginate(filteredAndSorted).map((payment) => {
                   const lease = leaseMap.get(payment.leaseId)
                   const tenant = tenantMap.get(payment.tenantId)
                   const property = lease ? propertyMap.get(lease.propertyId) : undefined
@@ -361,6 +365,15 @@ export default function PaymentsPage() {
               )}
             </TableBody>
           </Table>
+          {filteredAndSorted.length > 10 && (
+            <Pagination
+              total={filteredAndSorted.length}
+              page={pagination.page}
+              pageSize={pagination.pageSize}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={(s) => { pagination.setPageSize(s); pagination.setPage(1) }}
+            />
+          )}
         </CardContent>
       </Card>
 

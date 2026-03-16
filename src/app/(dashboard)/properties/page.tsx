@@ -5,6 +5,7 @@ import { Plus, Building2, MoreHorizontal } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { TableLoadingState } from '@/components/shared/LoadingState'
+import { Pagination, usePagination } from '@/components/shared/Pagination'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -82,6 +83,7 @@ export default function PropertiesPage() {
   }
 
   const canManage = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
+  const pagination = usePagination()
 
   return (
     <div>
@@ -97,7 +99,7 @@ export default function PropertiesPage() {
         }
       />
 
-      <Card>
+      <Card className="pt-0">
         <CardContent className="p-0">
           <Table>
             <TableHeader>
@@ -120,7 +122,7 @@ export default function PropertiesPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                properties.map((property) => {
+                pagination.paginate(properties).map((property) => {
                   const available = property.units?.filter((u) => u.status === 'AVAILABLE').length ?? 0
                   const total = property.units?.length ?? 0
                   return (
@@ -181,6 +183,15 @@ export default function PropertiesPage() {
               )}
             </TableBody>
           </Table>
+          {properties.length > 10 && (
+            <Pagination
+              total={properties.length}
+              page={pagination.page}
+              pageSize={pagination.pageSize}
+              onPageChange={pagination.setPage}
+              onPageSizeChange={(s) => { pagination.setPageSize(s); pagination.setPage(1) }}
+            />
+          )}
         </CardContent>
       </Card>
 

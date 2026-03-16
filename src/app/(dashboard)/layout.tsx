@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-zinc-500 text-sm">Loading...</div>
       </div>
     )
@@ -31,7 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <AppSidebar />
       <SidebarInset>
         <Header />
-        <main className="flex-1 p-6 bg-zinc-50 min-h-screen">
+        <main className="flex-1 p-6 bg-background min-h-screen">
           {children}
         </main>
       </SidebarInset>

@@ -211,15 +211,15 @@ export default function PropertyDetailPage() {
       {/* Summary stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'Total units', value: total },
-          { label: 'Available', value: available, accent: 'text-green-600' },
-          { label: 'Occupied', value: occupied, accent: 'text-blue-600' },
-          { label: 'Unavailable', value: unavailable, accent: 'text-amber-600' },
-        ].map(({ label, value, accent }) => (
-          <Card key={label}>
+          { label: 'Total units',  value: total,       accent: '',                  cardClass: 'bg-zinc-50 border-zinc-100 dark:bg-card dark:border-border' },
+          { label: 'Available',    value: available,   accent: 'text-green-600',    cardClass: 'bg-green-50 border-green-100 dark:bg-card dark:border-border' },
+          { label: 'Occupied',     value: occupied,    accent: 'text-blue-600',     cardClass: 'bg-blue-50 border-blue-100 dark:bg-card dark:border-border' },
+          { label: 'Unavailable',  value: unavailable, accent: 'text-amber-600',    cardClass: 'bg-amber-50 border-amber-100 dark:bg-card dark:border-border' },
+        ].map(({ label, value, accent, cardClass }) => (
+          <Card key={label} className={cardClass}>
             <CardContent className="p-4">
               <p className="text-xs text-muted-foreground mb-1">{label}</p>
-              <p className={`text-2xl font-semibold ${accent ?? ''}`}>{value}</p>
+              <p className={`text-2xl font-semibold ${accent}`}>{value}</p>
             </CardContent>
           </Card>
         ))}
@@ -485,10 +485,10 @@ function UnitCard({ unit, propertyId, fallbackCurrency, canManage, onMarkUnavail
         {unit.status === 'UNAVAILABLE' && unit.currentUnavailability && (
           <>
             <Separator />
-            <div className="rounded-md bg-amber-50 border border-amber-100 p-3 space-y-1">
-              <p className="text-xs font-medium text-amber-700">Currently unavailable</p>
-              <p className="text-xs text-amber-700">{unit.currentUnavailability.reason}</p>
-              <p className="text-xs text-amber-600">
+            <div className="rounded-md bg-amber-50 border border-amber-100 p-3 space-y-1 dark:bg-amber-900/20 dark:border-amber-900/40">
+              <p className="text-xs font-medium text-amber-700 dark:text-amber-400">Currently unavailable</p>
+              <p className="text-xs text-amber-700 dark:text-amber-400">{unit.currentUnavailability.reason}</p>
+              <p className="text-xs text-amber-600 dark:text-amber-500">
                 From {format(new Date(unit.currentUnavailability.startDate), 'MMM d, yyyy')}
                 {unit.currentUnavailability.endDate
                   ? ` · Until ${format(new Date(unit.currentUnavailability.endDate), 'MMM d, yyyy')}`

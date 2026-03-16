@@ -17,8 +17,8 @@ export function StatCard({
   value,
   icon: Icon,
   href,
-  colorClass = 'bg-zinc-50',
-  iconColorClass = 'text-zinc-600',
+  colorClass = 'bg-zinc-50 dark:bg-zinc-800/60',
+  iconColorClass = 'text-zinc-600 dark:text-zinc-400',
 }: StatCardProps) {
   const content = (
     <Card className={cn('border shadow-none', colorClass)}>

@@ -85,32 +85,32 @@ export default function DashboardPage() {
             value={properties.length}
             icon={Building2}
             href="/properties"
-            colorClass="bg-green-50 border-green-100"
-            iconColorClass="text-green-600"
+            colorClass="bg-green-50 border-green-100 dark:bg-green-950/40 dark:border-green-900"
+            iconColorClass="text-green-600 dark:text-green-400"
           />
           <StatCard
             label="Tenants"
             value={tenants.length}
             icon={Users}
             href="/tenants"
-            colorClass="bg-orange-50 border-orange-100"
-            iconColorClass="text-orange-600"
+            colorClass="bg-orange-50 border-orange-100 dark:bg-orange-950/40 dark:border-orange-900"
+            iconColorClass="text-orange-600 dark:text-orange-400"
           />
           <StatCard
             label="Active Leases"
             value={activeLeases}
             icon={FileText}
             href="/leasing"
-            colorClass="bg-blue-50 border-blue-100"
-            iconColorClass="text-blue-600"
+            colorClass="bg-blue-50 border-blue-100 dark:bg-blue-950/40 dark:border-blue-900"
+            iconColorClass="text-blue-600 dark:text-blue-400"
           />
           <StatCard
             label="Overdue Payments"
             value={overduePayments}
             icon={CreditCard}
             href="/payments"
-            colorClass="bg-pink-50 border-pink-100"
-            iconColorClass="text-pink-600"
+            colorClass="bg-pink-50 border-pink-100 dark:bg-pink-950/40 dark:border-pink-900"
+            iconColorClass="text-pink-600 dark:text-pink-400"
           />
         </div>
       )}
