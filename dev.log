@@ -1,0 +1,922 @@
+=== DEV LOG STARTED ===
+[2026-03-15T22:44:44.184Z] Providers: initialize() starting 
+[2026-03-15T22:44:44.191Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:44.198Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:44.439Z] Providers: initialize() starting 
+[2026-03-15T22:44:44.445Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:44.520Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:44.709Z] Providers: initialize() starting 
+[2026-03-15T22:44:44.718Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:44.800Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:45.028Z] Providers: initialize() starting 
+[2026-03-15T22:44:45.036Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:45.106Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:45.308Z] Providers: initialize() starting 
+[2026-03-15T22:44:45.317Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:45.334Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:45.549Z] Providers: initialize() starting 
+[2026-03-15T22:44:45.556Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:45.589Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:45.803Z] Providers: initialize() starting 
+[2026-03-15T22:44:45.809Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:45.877Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:46.054Z] Providers: initialize() starting 
+[2026-03-15T22:44:46.061Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:46.076Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:46.303Z] Providers: initialize() starting 
+[2026-03-15T22:44:46.311Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:46.380Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:46.560Z] Providers: initialize() starting 
+[2026-03-15T22:44:46.567Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:46.640Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:46.826Z] Providers: initialize() starting 
+[2026-03-15T22:44:46.835Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:46.890Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:47.073Z] Providers: initialize() starting 
+[2026-03-15T22:44:47.081Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:47.132Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:47.312Z] Providers: initialize() starting 
+[2026-03-15T22:44:47.322Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:47.369Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:47.588Z] Providers: initialize() starting 
+[2026-03-15T22:44:47.596Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:47.630Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:47.853Z] Providers: initialize() starting 
+[2026-03-15T22:44:47.862Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:47.913Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:48.097Z] Providers: initialize() starting 
+[2026-03-15T22:44:48.103Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:48.158Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:48.333Z] Providers: initialize() starting 
+[2026-03-15T22:44:48.341Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:48.401Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:48.651Z] Providers: initialize() starting 
+[2026-03-15T22:44:48.662Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:48.738Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:48.918Z] Providers: initialize() starting 
+[2026-03-15T22:44:48.928Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:48.993Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:49.164Z] Providers: initialize() starting 
+[2026-03-15T22:44:49.176Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:49.188Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:49.423Z] Providers: initialize() starting 
+[2026-03-15T22:44:49.438Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:49.450Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:49.680Z] Providers: initialize() starting 
+[2026-03-15T22:44:49.687Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:49.746Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:49.913Z] Providers: initialize() starting 
+[2026-03-15T22:44:49.922Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:49.977Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:50.152Z] Providers: initialize() starting 
+[2026-03-15T22:44:50.160Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:50.231Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:50.396Z] Providers: initialize() starting 
+[2026-03-15T22:44:50.405Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:50.442Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:50.672Z] Providers: initialize() starting 
+[2026-03-15T22:44:50.680Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:50.749Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:50.932Z] Providers: initialize() starting 
+[2026-03-15T22:44:50.938Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:50.999Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:51.164Z] Providers: initialize() starting 
+[2026-03-15T22:44:51.172Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:51.251Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:51.436Z] Providers: initialize() starting 
+[2026-03-15T22:44:51.445Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:51.516Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:51.692Z] Providers: initialize() starting 
+[2026-03-15T22:44:51.700Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:51.759Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:51.977Z] Providers: initialize() starting 
+[2026-03-15T22:44:51.985Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:52.024Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:52.233Z] Providers: initialize() starting 
+[2026-03-15T22:44:52.239Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:52.254Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:52.524Z] Providers: initialize() starting 
+[2026-03-15T22:44:52.532Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:52.592Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:52.768Z] Providers: initialize() starting 
+[2026-03-15T22:44:52.776Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:52.802Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:53.021Z] Providers: initialize() starting 
+[2026-03-15T22:44:53.030Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:53.082Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:53.249Z] Providers: initialize() starting 
+[2026-03-15T22:44:53.256Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:53.302Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:53.497Z] Providers: initialize() starting 
+[2026-03-15T22:44:53.507Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:53.587Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:53.768Z] Providers: initialize() starting 
+[2026-03-15T22:44:53.776Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:53.831Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:54.025Z] Providers: initialize() starting 
+[2026-03-15T22:44:54.032Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:54.092Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:54.286Z] Providers: initialize() starting 
+[2026-03-15T22:44:54.295Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:54.325Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:54.551Z] Providers: initialize() starting 
+[2026-03-15T22:44:54.559Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:54.617Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:54.799Z] Providers: initialize() starting 
+[2026-03-15T22:44:54.806Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:54.870Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:55.064Z] Providers: initialize() starting 
+[2026-03-15T22:44:55.070Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:55.124Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:55.306Z] Providers: initialize() starting 
+[2026-03-15T22:44:55.312Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:55.367Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:55.540Z] Providers: initialize() starting 
+[2026-03-15T22:44:55.548Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:55.604Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:55.781Z] Providers: initialize() starting 
+[2026-03-15T22:44:55.789Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:55.838Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:56.021Z] Providers: initialize() starting 
+[2026-03-15T22:44:56.029Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:56.091Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:56.258Z] Providers: initialize() starting 
+[2026-03-15T22:44:56.265Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:56.329Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:56.512Z] Providers: initialize() starting 
+[2026-03-15T22:44:56.520Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:56.573Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:56.772Z] Providers: initialize() starting 
+[2026-03-15T22:44:56.780Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:56.795Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:57.008Z] Providers: initialize() starting 
+[2026-03-15T22:44:57.017Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:57.068Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:57.255Z] Providers: initialize() starting 
+[2026-03-15T22:44:57.264Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:57.335Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:57.546Z] Providers: initialize() starting 
+[2026-03-15T22:44:57.554Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:57.617Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:57.788Z] Providers: initialize() starting 
+[2026-03-15T22:44:57.796Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:57.865Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:58.044Z] Providers: initialize() starting 
+[2026-03-15T22:44:58.053Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:58.080Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:58.372Z] Providers: initialize() starting 
+[2026-03-15T22:44:58.378Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:58.450Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:58.622Z] Providers: initialize() starting 
+[2026-03-15T22:44:58.628Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:58.694Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:58.873Z] Providers: initialize() starting 
+[2026-03-15T22:44:58.882Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:58.945Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:59.114Z] Providers: initialize() starting 
+[2026-03-15T22:44:59.124Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:59.158Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:59.379Z] Providers: initialize() starting 
+[2026-03-15T22:44:59.384Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:59.439Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:59.628Z] Providers: initialize() starting 
+[2026-03-15T22:44:59.637Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:59.671Z] Providers: fetchSettings() complete 
+[2026-03-15T22:44:59.894Z] Providers: initialize() starting 
+[2026-03-15T22:44:59.904Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:44:59.986Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:00.167Z] Providers: initialize() starting 
+[2026-03-15T22:45:00.175Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:00.236Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:00.435Z] Providers: initialize() starting 
+[2026-03-15T22:45:00.441Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:00.513Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:00.706Z] Providers: initialize() starting 
+[2026-03-15T22:45:00.715Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:00.791Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:00.981Z] Providers: initialize() starting 
+[2026-03-15T22:45:00.990Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:01.059Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:01.250Z] Providers: initialize() starting 
+[2026-03-15T22:45:01.257Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:01.318Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:01.482Z] Providers: initialize() starting 
+[2026-03-15T22:45:01.490Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:01.545Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:01.714Z] Providers: initialize() starting 
+[2026-03-15T22:45:01.722Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:01.776Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:01.964Z] Providers: initialize() starting 
+[2026-03-15T22:45:01.973Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:02.028Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:02.213Z] Providers: initialize() starting 
+[2026-03-15T22:45:02.223Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:02.295Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:02.476Z] Providers: initialize() starting 
+[2026-03-15T22:45:02.485Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:02.542Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:02.709Z] Providers: initialize() starting 
+[2026-03-15T22:45:02.719Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:02.772Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:02.950Z] Providers: initialize() starting 
+[2026-03-15T22:45:02.956Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:03.015Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:03.223Z] Providers: initialize() starting 
+[2026-03-15T22:45:03.231Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:03.283Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:03.452Z] Providers: initialize() starting 
+[2026-03-15T22:45:03.461Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:03.525Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:03.696Z] Providers: initialize() starting 
+[2026-03-15T22:45:03.705Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:03.760Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:03.939Z] Providers: initialize() starting 
+[2026-03-15T22:45:03.945Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:04.021Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:04.196Z] Providers: initialize() starting 
+[2026-03-15T22:45:04.207Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:04.281Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:04.486Z] Providers: initialize() starting 
+[2026-03-15T22:45:04.496Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:04.550Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:04.780Z] Providers: initialize() starting 
+[2026-03-15T22:45:04.789Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:04.843Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:05.023Z] Providers: initialize() starting 
+[2026-03-15T22:45:05.031Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:05.050Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:05.281Z] Providers: initialize() starting 
+[2026-03-15T22:45:05.287Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:05.338Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:05.535Z] Providers: initialize() starting 
+[2026-03-15T22:45:05.542Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:05.556Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:05.770Z] Providers: initialize() starting 
+[2026-03-15T22:45:05.779Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:05.843Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:06.012Z] Providers: initialize() starting 
+[2026-03-15T22:45:06.020Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:06.084Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:06.267Z] Providers: initialize() starting 
+[2026-03-15T22:45:06.275Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:06.327Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:06.553Z] Providers: initialize() starting 
+[2026-03-15T22:45:06.563Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:06.587Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:06.959Z] Providers: initialize() starting 
+[2026-03-15T22:45:06.964Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:06.972Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:07.203Z] Providers: initialize() starting 
+[2026-03-15T22:45:07.208Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:07.263Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:07.479Z] Providers: initialize() starting 
+[2026-03-15T22:45:07.487Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:07.554Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:07.739Z] Providers: initialize() starting 
+[2026-03-15T22:45:07.746Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:07.760Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:07.973Z] Providers: initialize() starting 
+[2026-03-15T22:45:07.981Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:08.035Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:08.236Z] Providers: initialize() starting 
+[2026-03-15T22:45:08.241Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:08.298Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:08.483Z] Providers: initialize() starting 
+[2026-03-15T22:45:08.490Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:08.554Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:08.722Z] Providers: initialize() starting 
+[2026-03-15T22:45:08.727Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:08.790Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:08.976Z] Providers: initialize() starting 
+[2026-03-15T22:45:08.987Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:09.005Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:09.237Z] Providers: initialize() starting 
+[2026-03-15T22:45:09.245Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:09.301Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:09.489Z] Providers: initialize() starting 
+[2026-03-15T22:45:09.500Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:09.565Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:09.734Z] Providers: initialize() starting 
+[2026-03-15T22:45:09.742Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:09.756Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:10.005Z] Providers: initialize() starting 
+[2026-03-15T22:45:10.012Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:10.029Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:10.250Z] Providers: initialize() starting 
+[2026-03-15T22:45:10.256Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:10.330Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:10.501Z] Providers: initialize() starting 
+[2026-03-15T22:45:10.509Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:10.526Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:10.735Z] Providers: initialize() starting 
+[2026-03-15T22:45:10.743Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:10.801Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:10.974Z] Providers: initialize() starting 
+[2026-03-15T22:45:10.979Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:11.005Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:11.214Z] Providers: initialize() starting 
+[2026-03-15T22:45:11.228Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:11.284Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:11.457Z] Providers: initialize() starting 
+[2026-03-15T22:45:11.466Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:11.538Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:11.706Z] Providers: initialize() starting 
+[2026-03-15T22:45:11.717Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:11.749Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:11.965Z] Providers: initialize() starting 
+[2026-03-15T22:45:11.977Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:12.043Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:12.222Z] Providers: initialize() starting 
+[2026-03-15T22:45:12.235Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:12.248Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:12.493Z] Providers: initialize() starting 
+[2026-03-15T22:45:12.501Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:12.516Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:12.740Z] Providers: initialize() starting 
+[2026-03-15T22:45:12.749Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:12.800Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:12.982Z] Providers: initialize() starting 
+[2026-03-15T22:45:12.988Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:13.045Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:13.242Z] Providers: initialize() starting 
+[2026-03-15T22:45:13.248Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:13.285Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:13.495Z] Providers: initialize() starting 
+[2026-03-15T22:45:13.504Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:13.521Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:13.722Z] Providers: initialize() starting 
+[2026-03-15T22:45:13.730Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:13.786Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:13.965Z] Providers: initialize() starting 
+[2026-03-15T22:45:13.978Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:14.028Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:14.219Z] Providers: initialize() starting 
+[2026-03-15T22:45:14.233Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:14.280Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:14.467Z] Providers: initialize() starting 
+[2026-03-15T22:45:14.473Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:14.531Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:14.691Z] Providers: initialize() starting 
+[2026-03-15T22:45:14.701Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:14.758Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:14.990Z] Providers: initialize() starting 
+[2026-03-15T22:45:14.999Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:15.017Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:15.227Z] Providers: initialize() starting 
+[2026-03-15T22:45:15.235Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:15.295Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:15.475Z] Providers: initialize() starting 
+[2026-03-15T22:45:15.482Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:15.517Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:15.729Z] Providers: initialize() starting 
+[2026-03-15T22:45:15.736Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:15.786Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:15.959Z] Providers: initialize() starting 
+[2026-03-15T22:45:15.968Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:16.020Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:16.185Z] Providers: initialize() starting 
+[2026-03-15T22:45:16.191Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:16.243Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:16.443Z] Providers: initialize() starting 
+[2026-03-15T22:45:16.452Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:16.488Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:16.688Z] Providers: initialize() starting 
+[2026-03-15T22:45:16.694Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:16.729Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:16.909Z] Providers: initialize() starting 
+[2026-03-15T22:45:16.915Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:16.981Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:17.170Z] Providers: initialize() starting 
+[2026-03-15T22:45:17.178Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:17.241Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:28.029Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:28.040Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:28.050Z] Providers: initialize() starting 
+[2026-03-15T22:45:30.365Z] Providers: initialize() starting 
+[2026-03-15T22:45:30.374Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:30.421Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:30.688Z] Providers: initialize() starting 
+[2026-03-15T22:45:30.697Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:30.730Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:30.980Z] Providers: initialize() starting 
+[2026-03-15T22:45:30.987Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:31.061Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:31.277Z] Providers: initialize() starting 
+[2026-03-15T22:45:31.285Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:31.354Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:31.551Z] Providers: initialize() starting 
+[2026-03-15T22:45:31.556Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:31.610Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:31.807Z] Providers: initialize() starting 
+[2026-03-15T22:45:31.813Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:31.829Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:32.217Z] Providers: initialize() starting 
+[2026-03-15T22:45:32.222Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:32.228Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:32.456Z] Providers: initialize() starting 
+[2026-03-15T22:45:32.465Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:32.537Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:32.729Z] Providers: initialize() starting 
+[2026-03-15T22:45:32.743Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:32.757Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:32.967Z] Providers: initialize() starting 
+[2026-03-15T22:45:32.980Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:33.005Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:33.260Z] Providers: initialize() starting 
+[2026-03-15T22:45:33.265Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:45:33.353Z] Providers: fetchSettings() complete 
+[2026-03-15T22:45:33.551Z] Providers: initialize() starting 
+[2026-03-15T22:45:33.580Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:40.222Z] Providers: initialize() starting 
+[2026-03-15T22:51:40.273Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:40.345Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:45.382Z] Providers: initialize() starting 
+[2026-03-15T22:51:45.392Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:45.409Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:45.677Z] Providers: initialize() starting 
+[2026-03-15T22:51:45.689Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:45.791Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:46.014Z] Providers: initialize() starting 
+[2026-03-15T22:51:46.024Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:46.060Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:46.326Z] Providers: initialize() starting 
+[2026-03-15T22:51:46.335Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:46.401Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:46.580Z] Providers: initialize() starting 
+[2026-03-15T22:51:46.586Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:46.664Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:46.850Z] Providers: initialize() starting 
+[2026-03-15T22:51:46.859Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:46.924Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:47.151Z] Providers: initialize() starting 
+[2026-03-15T22:51:47.157Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:47.234Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:47.405Z] Providers: initialize() starting 
+[2026-03-15T22:51:47.415Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:47.478Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:47.661Z] Providers: initialize() starting 
+[2026-03-15T22:51:47.671Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:47.701Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:47.913Z] Providers: initialize() starting 
+[2026-03-15T22:51:47.918Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:47.975Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:48.145Z] Providers: initialize() starting 
+[2026-03-15T22:51:48.154Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:48.216Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:48.385Z] Providers: initialize() starting 
+[2026-03-15T22:51:48.391Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:48.460Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:48.623Z] Providers: initialize() starting 
+[2026-03-15T22:51:48.634Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:48.699Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:48.855Z] Providers: initialize() starting 
+[2026-03-15T22:51:48.868Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:48.878Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:49.092Z] Providers: initialize() starting 
+[2026-03-15T22:51:49.103Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:49.151Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:49.338Z] Providers: initialize() starting 
+[2026-03-15T22:51:49.349Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:49.453Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:49.646Z] Providers: initialize() starting 
+[2026-03-15T22:51:49.659Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:49.739Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:49.933Z] Providers: initialize() starting 
+[2026-03-15T22:51:49.938Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:50.011Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:50.178Z] Providers: initialize() starting 
+[2026-03-15T22:51:50.187Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:50.243Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:50.445Z] Providers: initialize() starting 
+[2026-03-15T22:51:50.451Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:50.527Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:50.716Z] Providers: initialize() starting 
+[2026-03-15T22:51:50.721Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:50.778Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:50.955Z] Providers: initialize() starting 
+[2026-03-15T22:51:50.964Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:51.019Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:51.203Z] Providers: initialize() starting 
+[2026-03-15T22:51:51.209Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:51.271Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:51.448Z] Providers: initialize() starting 
+[2026-03-15T22:51:51.457Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:51.526Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:51.702Z] Providers: initialize() starting 
+[2026-03-15T22:51:51.710Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:51.742Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:51.934Z] Providers: initialize() starting 
+[2026-03-15T22:51:51.943Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:51.996Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:52.200Z] Providers: initialize() starting 
+[2026-03-15T22:51:52.205Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:52.225Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:52.464Z] Providers: initialize() starting 
+[2026-03-15T22:51:52.474Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:52.530Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:52.715Z] Providers: initialize() starting 
+[2026-03-15T22:51:52.726Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:52.786Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:52.981Z] Providers: initialize() starting 
+[2026-03-15T22:51:52.990Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:53.011Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:53.221Z] Providers: initialize() starting 
+[2026-03-15T22:51:53.226Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:53.272Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:53.448Z] Providers: initialize() starting 
+[2026-03-15T22:51:53.455Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:53.472Z] Providers: fetchSettings() complete 
+[2026-03-15T22:51:53.684Z] Providers: initialize() starting 
+[2026-03-15T22:51:53.694Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:51:53.749Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:12.625Z] Providers: initialize() starting 
+[2026-03-15T22:52:12.637Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:12.650Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:12.812Z] Providers: initialize() starting 
+[2026-03-15T22:52:12.821Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:12.831Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:12.967Z] Providers: initialize() starting 
+[2026-03-15T22:52:12.979Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:13.021Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:13.118Z] Providers: initialize() starting 
+[2026-03-15T22:52:13.123Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:13.136Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:13.273Z] Providers: initialize() starting 
+[2026-03-15T22:52:13.282Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:13.292Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:13.423Z] Providers: initialize() starting 
+[2026-03-15T22:52:13.432Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:13.442Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:13.580Z] Providers: initialize() starting 
+[2026-03-15T22:52:13.589Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:13.599Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:13.740Z] Providers: initialize() starting 
+[2026-03-15T22:52:13.749Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:13.759Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:13.894Z] Providers: initialize() starting 
+[2026-03-15T22:52:13.901Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:13.911Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:14.065Z] Providers: initialize() starting 
+[2026-03-15T22:52:14.071Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:14.081Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:14.213Z] Providers: initialize() starting 
+[2026-03-15T22:52:14.217Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:14.228Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:14.355Z] Providers: initialize() starting 
+[2026-03-15T22:52:14.362Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:14.373Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:14.496Z] Providers: initialize() starting 
+[2026-03-15T22:52:14.505Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:14.516Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:14.647Z] Providers: initialize() starting 
+[2026-03-15T22:52:14.654Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:14.665Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:14.814Z] Providers: initialize() starting 
+[2026-03-15T22:52:14.821Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:14.832Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:14.988Z] Providers: initialize() starting 
+[2026-03-15T22:52:14.998Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:15.011Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:15.189Z] Providers: initialize() starting 
+[2026-03-15T22:52:15.195Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:15.208Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:15.346Z] Providers: initialize() starting 
+[2026-03-15T22:52:15.351Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:15.364Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:15.494Z] Providers: initialize() starting 
+[2026-03-15T22:52:15.499Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:15.513Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:15.657Z] Providers: initialize() starting 
+[2026-03-15T22:52:15.663Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:15.694Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:15.827Z] Providers: initialize() starting 
+[2026-03-15T22:52:15.833Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:15.849Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:15.983Z] Providers: initialize() starting 
+[2026-03-15T22:52:15.988Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:16.002Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:16.134Z] Providers: initialize() starting 
+[2026-03-15T22:52:16.140Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:16.150Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:16.282Z] Providers: initialize() starting 
+[2026-03-15T22:52:16.289Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:16.300Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:16.436Z] Providers: initialize() starting 
+[2026-03-15T22:52:16.446Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:16.458Z] Providers: fetchSettings() complete 
+[2026-03-15T22:52:16.598Z] Providers: initialize() starting 
+[2026-03-15T22:52:16.605Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:52:16.618Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:53.024Z] Providers: initialize() starting 
+[2026-03-15T22:53:53.043Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:53.055Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:53.295Z] Providers: initialize() starting 
+[2026-03-15T22:53:53.309Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:53.322Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:53.569Z] Providers: initialize() starting 
+[2026-03-15T22:53:53.578Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:53.594Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:53.835Z] Providers: initialize() starting 
+[2026-03-15T22:53:53.844Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:53.857Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:54.107Z] Providers: initialize() starting 
+[2026-03-15T22:53:54.116Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:54.130Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:54.352Z] Providers: initialize() starting 
+[2026-03-15T22:53:54.360Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:54.375Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:54.632Z] Providers: initialize() starting 
+[2026-03-15T22:53:54.640Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:54.654Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:54.944Z] Providers: initialize() starting 
+[2026-03-15T22:53:54.953Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:54.971Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:55.254Z] Providers: initialize() starting 
+[2026-03-15T22:53:55.261Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:55.276Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:55.577Z] Providers: initialize() starting 
+[2026-03-15T22:53:55.586Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:55.691Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:55.893Z] Providers: initialize() starting 
+[2026-03-15T22:53:55.903Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:55.933Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:55.936Z] Providers: initialize() starting 
+[2026-03-15T22:53:55.944Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:56.001Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:56.208Z] Providers: initialize() starting 
+[2026-03-15T22:53:56.216Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:56.227Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:56.455Z] Providers: initialize() starting 
+[2026-03-15T22:53:56.463Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:56.509Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:56.716Z] Providers: initialize() starting 
+[2026-03-15T22:53:56.724Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:56.737Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:56.978Z] Providers: initialize() starting 
+[2026-03-15T22:53:56.985Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:56.996Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:57.245Z] Providers: initialize() starting 
+[2026-03-15T22:53:57.253Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:57.297Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:57.565Z] Providers: initialize() starting 
+[2026-03-15T22:53:57.573Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:57.585Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:57.873Z] Providers: initialize() starting 
+[2026-03-15T22:53:57.882Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:57.930Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:58.149Z] Providers: initialize() starting 
+[2026-03-15T22:53:58.156Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:58.170Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:58.415Z] Providers: initialize() starting 
+[2026-03-15T22:53:58.425Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:58.441Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:58.710Z] Providers: initialize() starting 
+[2026-03-15T22:53:58.720Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:58.770Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:58.982Z] Providers: initialize() starting 
+[2026-03-15T22:53:58.991Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:59.003Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:59.289Z] Providers: initialize() starting 
+[2026-03-15T22:53:59.297Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:59.309Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:59.609Z] Providers: initialize() starting 
+[2026-03-15T22:53:59.618Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:59.633Z] Providers: fetchSettings() complete 
+[2026-03-15T22:53:59.937Z] Providers: initialize() starting 
+[2026-03-15T22:53:59.944Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:53:59.962Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:00.227Z] Providers: initialize() starting 
+[2026-03-15T22:54:00.235Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:00.249Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:00.474Z] Providers: initialize() starting 
+[2026-03-15T22:54:00.481Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:00.494Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:00.709Z] Providers: initialize() starting 
+[2026-03-15T22:54:00.798Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:00.804Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:01.013Z] Providers: initialize() starting 
+[2026-03-15T22:54:01.022Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:01.076Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:01.257Z] Providers: initialize() starting 
+[2026-03-15T22:54:01.263Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:01.318Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:01.493Z] Providers: initialize() starting 
+[2026-03-15T22:54:01.498Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:01.552Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:01.767Z] Providers: initialize() starting 
+[2026-03-15T22:54:01.774Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:01.825Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:01.999Z] Providers: initialize() starting 
+[2026-03-15T22:54:02.006Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:02.062Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:02.245Z] Providers: initialize() starting 
+[2026-03-15T22:54:02.251Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:02.301Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:02.484Z] Providers: initialize() starting 
+[2026-03-15T22:54:02.493Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:02.563Z] Providers: fetchSettings() complete 
+[2026-03-15T22:54:05.860Z] Providers: initialize() starting 
+[2026-03-15T22:54:05.868Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:54:05.882Z] Providers: fetchSettings() complete 
+[2026-03-15T22:58:03.923Z] Providers: initialize() starting 
+[2026-03-15T22:58:03.932Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:58:03.940Z] Providers: fetchSettings() complete 
+[2026-03-15T22:58:50.087Z] Providers: initialize() starting 
+[2026-03-15T22:58:50.099Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:58:50.106Z] Providers: fetchSettings() complete 
+[2026-03-15T22:58:58.160Z] Providers: initialize() starting 
+[2026-03-15T22:58:58.169Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:58:58.239Z] Providers: fetchSettings() complete 
+[2026-03-15T22:58:58.937Z] Providers: initialize() starting 
+[2026-03-15T22:58:58.948Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:58:58.961Z] Providers: fetchSettings() complete 
+[2026-03-15T22:58:59.582Z] Providers: initialize() starting 
+[2026-03-15T22:58:59.592Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:58:59.654Z] Providers: fetchSettings() complete 
+[2026-03-15T22:59:00.254Z] Providers: initialize() starting 
+[2026-03-15T22:59:00.265Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:59:00.325Z] Providers: fetchSettings() complete 
+[2026-03-15T22:59:00.933Z] Providers: initialize() starting 
+[2026-03-15T22:59:00.941Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:59:00.991Z] Providers: fetchSettings() complete 
+[2026-03-15T22:59:01.624Z] Providers: initialize() starting 
+[2026-03-15T22:59:01.634Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:59:01.656Z] Providers: fetchSettings() complete 
+[2026-03-15T22:59:02.372Z] Providers: initialize() starting 
+[2026-03-15T22:59:02.381Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:59:02.443Z] Providers: fetchSettings() complete 
+[2026-03-15T22:59:03.040Z] Providers: initialize() starting 
+[2026-03-15T22:59:03.049Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:59:03.097Z] Providers: fetchSettings() complete 
+[2026-03-15T22:59:03.771Z] Providers: initialize() starting 
+[2026-03-15T22:59:03.779Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:59:03.829Z] Providers: fetchSettings() complete 
+[2026-03-15T22:59:04.455Z] Providers: initialize() starting 
+[2026-03-15T22:59:04.464Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T22:59:04.474Z] Providers: fetchSettings() complete 
+[2026-03-15T23:00:05.431Z] Providers: initialize() starting 
+[2026-03-15T23:00:05.441Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:00:05.567Z] Providers: fetchSettings() complete 
+[2026-03-15T23:00:06.276Z] Providers: initialize() starting 
+[2026-03-15T23:00:06.287Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:00:06.371Z] Providers: fetchSettings() complete 
+[2026-03-15T23:00:06.857Z] Providers: initialize() starting 
+[2026-03-15T23:00:06.868Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:00:06.968Z] Providers: fetchSettings() complete 
+[2026-03-15T23:00:07.667Z] Providers: initialize() starting 
+[2026-03-15T23:00:07.679Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:00:07.709Z] Providers: fetchSettings() complete 
+[2026-03-15T23:00:08.201Z] Providers: initialize() starting 
+[2026-03-15T23:00:08.208Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:00:08.292Z] Providers: fetchSettings() complete 
+[2026-03-15T23:00:08.758Z] Providers: initialize() starting 
+[2026-03-15T23:00:08.767Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:00:08.839Z] Providers: fetchSettings() complete 
+[2026-03-15T23:00:13.525Z] DashboardLayout: auth state changed {"isAuthenticated":true,"isLoading":false}
+[2026-03-15T23:00:13.533Z] DashboardLayout: auth state changed {"isAuthenticated":true,"isLoading":false}
+[2026-03-15T23:01:04.992Z] DashboardLayout: auth state changed {"isAuthenticated":false,"isLoading":true}
+[2026-03-15T23:01:05.002Z] Providers: initialize() starting 
+[2026-03-15T23:01:05.234Z] DashboardLayout: auth state changed {"isAuthenticated":true,"isLoading":false}
+[2026-03-15T23:01:05.263Z] Providers: initialize() complete {"isAuthenticated":true,"userId":"87520592-22b4-47f3-b4ac-22d000f59c86"}
+[2026-03-15T23:01:05.358Z] Providers: fetchSettings() complete 
+[2026-03-15T23:01:29.783Z] DashboardLayout: auth state changed {"isAuthenticated":false,"isLoading":true}
+[2026-03-15T23:01:29.793Z] Providers: initialize() starting 
+[2026-03-15T23:01:30.022Z] DashboardLayout: auth state changed {"isAuthenticated":true,"isLoading":false}
+[2026-03-15T23:01:30.052Z] Providers: initialize() complete {"isAuthenticated":true,"userId":"87520592-22b4-47f3-b4ac-22d000f59c86"}
+[2026-03-15T23:01:30.137Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:50.752Z] DashboardLayout: auth state changed {"isAuthenticated":false,"isLoading":false}
+[2026-03-15T23:14:50.776Z] DashboardLayout: redirecting to /login — not authenticated 
+[2026-03-15T23:14:51.158Z] Providers: initialize() starting 
+[2026-03-15T23:14:51.166Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:51.188Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:51.456Z] Providers: initialize() starting 
+[2026-03-15T23:14:51.463Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:51.531Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:51.731Z] Providers: initialize() starting 
+[2026-03-15T23:14:51.740Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:51.815Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:52.001Z] Providers: initialize() starting 
+[2026-03-15T23:14:52.009Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:52.065Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:52.259Z] Providers: initialize() starting 
+[2026-03-15T23:14:52.269Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:52.339Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:52.546Z] Providers: initialize() starting 
+[2026-03-15T23:14:52.554Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:52.604Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:52.778Z] Providers: initialize() starting 
+[2026-03-15T23:14:52.784Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:52.799Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:53.037Z] Providers: initialize() starting 
+[2026-03-15T23:14:53.047Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:53.119Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:53.321Z] Providers: initialize() starting 
+[2026-03-15T23:14:53.330Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:53.401Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:53.597Z] Providers: initialize() starting 
+[2026-03-15T23:14:53.602Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:53.664Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:53.836Z] Providers: initialize() starting 
+[2026-03-15T23:14:53.846Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:53.912Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:54.109Z] Providers: initialize() starting 
+[2026-03-15T23:14:54.117Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:54.148Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:54.405Z] Providers: initialize() starting 
+[2026-03-15T23:14:54.415Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:54.469Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:54.643Z] Providers: initialize() starting 
+[2026-03-15T23:14:54.650Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:54.711Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:54.896Z] Providers: initialize() starting 
+[2026-03-15T23:14:54.904Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:54.975Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:55.170Z] Providers: initialize() starting 
+[2026-03-15T23:14:55.179Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:55.257Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:55.454Z] Providers: initialize() starting 
+[2026-03-15T23:14:55.464Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:55.500Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:55.838Z] Providers: initialize() starting 
+[2026-03-15T23:14:55.854Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:55.873Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:56.150Z] Providers: initialize() starting 
+[2026-03-15T23:14:56.158Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:56.173Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:56.402Z] Providers: initialize() starting 
+[2026-03-15T23:14:56.410Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:56.461Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:56.651Z] Providers: initialize() starting 
+[2026-03-15T23:14:56.659Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:56.706Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:56.913Z] Providers: initialize() starting 
+[2026-03-15T23:14:56.922Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:56.969Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:57.160Z] Providers: initialize() starting 
+[2026-03-15T23:14:57.166Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:57.230Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:57.422Z] Providers: initialize() starting 
+[2026-03-15T23:14:57.429Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:57.496Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:57.704Z] Providers: initialize() starting 
+[2026-03-15T23:14:57.713Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:57.768Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:57.936Z] Providers: initialize() starting 
+[2026-03-15T23:14:57.946Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:57.968Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:58.209Z] Providers: initialize() starting 
+[2026-03-15T23:14:58.218Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:58.300Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:58.489Z] Providers: initialize() starting 
+[2026-03-15T23:14:58.498Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:58.566Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:58.747Z] Providers: initialize() starting 
+[2026-03-15T23:14:58.757Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:58.770Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:59.006Z] Providers: initialize() starting 
+[2026-03-15T23:14:59.015Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:59.082Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:59.270Z] Providers: initialize() starting 
+[2026-03-15T23:14:59.277Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:59.337Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:59.539Z] Providers: initialize() starting 
+[2026-03-15T23:14:59.547Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:59.600Z] Providers: fetchSettings() complete 
+[2026-03-15T23:14:59.794Z] Providers: initialize() starting 
+[2026-03-15T23:14:59.806Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:14:59.816Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:00.063Z] Providers: initialize() starting 
+[2026-03-15T23:15:00.073Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:00.084Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:00.327Z] Providers: initialize() starting 
+[2026-03-15T23:15:00.333Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:00.388Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:00.569Z] Providers: initialize() starting 
+[2026-03-15T23:15:00.576Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:00.640Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:00.834Z] Providers: initialize() starting 
+[2026-03-15T23:15:00.842Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:00.904Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:01.121Z] Providers: initialize() starting 
+[2026-03-15T23:15:01.130Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:01.191Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:01.360Z] Providers: initialize() starting 
+[2026-03-15T23:15:01.369Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:01.446Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:01.643Z] Providers: initialize() starting 
+[2026-03-15T23:15:01.652Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:01.706Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:01.904Z] Providers: initialize() starting 
+[2026-03-15T23:15:01.912Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:01.928Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:02.171Z] Providers: initialize() starting 
+[2026-03-15T23:15:02.177Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:02.233Z] Providers: fetchSettings() complete 
+[2026-03-15T23:15:02.434Z] Providers: initialize() starting 
+[2026-03-15T23:15:02.440Z] Providers: initialize() complete {"isAuthenticated":false}
+[2026-03-15T23:15:05.221Z] DashboardLayout: auth state changed {"isAuthenticated":true,"isLoading":false}
+[2026-03-15T23:15:05.235Z] DashboardLayout: auth state changed {"isAuthenticated":true,"isLoading":false}
+[2026-03-15T23:15:10.344Z] DashboardLayout: auth state changed {"isAuthenticated":false,"isLoading":true}
+[2026-03-15T23:15:10.386Z] DashboardLayout: auth state changed {"isAuthenticated":true,"isLoading":false}
+[2026-03-15T23:15:16.561Z] DashboardLayout: auth state changed {"isAuthenticated":false,"isLoading":true}
+[2026-03-15T23:15:16.603Z] DashboardLayout: auth state changed {"isAuthenticated":true,"isLoading":false}

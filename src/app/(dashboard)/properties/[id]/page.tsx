@@ -1,0 +1,536 @@
+'use client'
+import { useEffect, useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { ArrowLeft, BedDouble, Bath, Maximize2, MoreHorizontal, CalendarX, CalendarCheck, FileText, UserPlus } from 'lucide-react'
+import { PageHeader } from '@/components/shared/PageHeader'
+import { StatusBadge } from '@/components/shared/StatusBadge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+} from '@/components/ui/dialog'
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuSeparator, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
+import { propertiesApi } from '@/lib/api/properties.api'
+import { occupancyApi } from '@/lib/api/occupancy.api'
+import { useAuthStore, useSettingsStore } from '@/store'
+import { useEventLogger } from '@/hooks/useEventLogger'
+import { formatCurrency } from '@/lib/formatCurrency'
+import { toast } from 'sonner'
+import type { Property, PropertyUnit, UnavailabilityRecord } from '@/types'
+import { format } from 'date-fns'
+
+const LEASE_PERIODS = ['6 months', '1 year', '2 years']
+
+function generateId() {
+  return Math.random().toString(36).slice(2, 10)
+}
+
+interface UnavailableDialogState {
+  unitId: string
+  unitNumber: string
+}
+
+export default function PropertyDetailPage() {
+  const { id } = useParams<{ id: string }>()
+  const router = useRouter()
+  const logEvent = useEventLogger()
+  const { user } = useAuthStore()
+
+  const [property, setProperty] = useState<Property | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Mark unavailable dialog
+  const [unavailableTarget, setUnavailableTarget] = useState<UnavailableDialogState | null>(null)
+  const [unavailableForm, setUnavailableForm] = useState({
+    reason: '',
+    startDate: format(new Date(), 'yyyy-MM-dd'),
+    endDate: '',
+  })
+
+  // Mark available confirm dialog
+  const [availableTarget, setAvailableTarget] = useState<UnavailableDialogState | null>(null)
+
+  useEffect(() => {
+    logEvent('PAGE_VIEW', 'property_detail', { propertyId: id })
+    propertiesApi
+      .getById(id)
+      .then(setProperty)
+      .catch(() => toast.error('Failed to load property'))
+      .finally(() => setIsLoading(false))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id])
+
+  function updateUnit(unitId: string, changes: Partial<PropertyUnit>) {
+    setProperty((prev) => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        units: prev.units.map((u) => u.id === unitId ? { ...u, ...changes } : u),
+      }
+    })
+  }
+
+  async function handleMarkUnavailable() {
+    if (!unavailableTarget) return
+    const { unitId } = unavailableTarget
+
+    const record: UnavailabilityRecord = {
+      id: generateId(),
+      reason: unavailableForm.reason,
+      startDate: unavailableForm.startDate,
+      endDate: unavailableForm.endDate || undefined,
+      createdAt: new Date().toISOString(),
+    }
+
+    // Snapshot for rollback
+    const unit = property?.units.find((u) => u.id === unitId)
+    const snapshot = unit ? { status: unit.status, currentUnavailability: unit.currentUnavailability, unavailabilityHistory: unit.unavailabilityHistory } : null
+
+    // Optimistic update
+    updateUnit(unitId, {
+      status: 'UNAVAILABLE',
+      currentUnavailability: record,
+      unavailabilityHistory: [record, ...(unit?.unavailabilityHistory ?? [])],
+    })
+    setUnavailableTarget(null)
+    setUnavailableForm({ reason: '', startDate: format(new Date(), 'yyyy-MM-dd'), endDate: '' })
+    setIsSubmitting(true)
+
+    try {
+      const updated = await propertiesApi.markUnitUnavailable(unitId, {
+        reason: record.reason,
+        startDate: record.startDate,
+        endDate: record.endDate,
+      })
+      // Reconcile with server response
+      updateUnit(unitId, {
+        status: updated.status,
+        currentUnavailability: updated.currentUnavailability,
+        unavailabilityHistory: updated.unavailabilityHistory,
+      })
+      toast.success('Unit marked as unavailable')
+      logEvent('USER_ACTION', 'mark_unit_unavailable', { unitId, reason: record.reason })
+    } catch {
+      // Rollback optimistic update
+      if (snapshot) updateUnit(unitId, snapshot)
+      toast.error('Failed to update unit — please try again')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  async function handleMarkAvailable() {
+    if (!availableTarget) return
+    const { unitId } = availableTarget
+
+    // Snapshot for rollback
+    const unit = property?.units.find((u) => u.id === unitId)
+    const snapshot = unit ? { status: unit.status, currentUnavailability: unit.currentUnavailability } : null
+
+    // Optimistic update
+    updateUnit(unitId, { status: 'AVAILABLE', currentUnavailability: null })
+    setAvailableTarget(null)
+    setIsSubmitting(true)
+
+    try {
+      const updated = await propertiesApi.markUnitAvailable(unitId)
+      updateUnit(unitId, {
+        status: updated.status,
+        currentUnavailability: updated.currentUnavailability,
+        unavailabilityHistory: updated.unavailabilityHistory,
+      })
+      toast.success('Unit marked as available')
+      logEvent('USER_ACTION', 'mark_unit_available', { unitId })
+    } catch {
+      // Rollback optimistic update
+      if (snapshot) updateUnit(unitId, snapshot)
+      toast.error('Failed to update unit — please try again')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const currency = useSettingsStore((s) => s.settings?.currency ?? 'USD')
+  const canManage = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-8 w-40 bg-muted animate-pulse rounded" />
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="h-56 bg-muted animate-pulse rounded-lg" />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (!property) {
+    return (
+      <div className="text-center py-24 text-muted-foreground">
+        <p>Property not found.</p>
+        <Button variant="link" onClick={() => router.push('/properties')}>
+          Back to properties
+        </Button>
+      </div>
+    )
+  }
+
+  const available = property.units?.filter((u) => u.status === 'AVAILABLE').length ?? 0
+  const occupied = property.units?.filter((u) => u.status === 'OCCUPIED').length ?? 0
+  const unavailable = property.units?.filter((u) => u.status === 'UNAVAILABLE').length ?? 0
+  const total = property.units?.length ?? 0
+
+  return (
+    <div>
+      <div className="mb-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-1.5 text-muted-foreground"
+          onClick={() => router.push('/properties')}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to properties
+        </Button>
+      </div>
+
+      <PageHeader
+        title={property.name}
+        description={`${property.street}, ${property.city}, ${property.state} ${property.zipCode}`}
+      />
+
+      {/* Summary stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        {[
+          { label: 'Total units', value: total },
+          { label: 'Available', value: available, accent: 'text-green-600' },
+          { label: 'Occupied', value: occupied, accent: 'text-blue-600' },
+          { label: 'Unavailable', value: unavailable, accent: 'text-amber-600' },
+        ].map(({ label, value, accent }) => (
+          <Card key={label}>
+            <CardContent className="p-4">
+              <p className="text-xs text-muted-foreground mb-1">{label}</p>
+              <p className={`text-2xl font-semibold ${accent ?? ''}`}>{value}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Units grid */}
+      {total === 0 ? (
+        <Card>
+          <CardContent className="py-16 text-center text-muted-foreground">
+            <p>No units have been added to this property yet.</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {property.units.map((unit) => (
+            <UnitCard
+              key={unit.id}
+              unit={unit}
+              propertyId={id}
+              fallbackCurrency={currency}
+              canManage={canManage}
+              onMarkUnavailable={() =>
+                setUnavailableTarget({ unitId: unit.id, unitNumber: unit.unitNumber })
+              }
+              onMarkAvailable={() =>
+                setAvailableTarget({ unitId: unit.id, unitNumber: unit.unitNumber })
+              }
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Mark Unavailable Dialog */}
+      <Dialog
+        open={!!unavailableTarget}
+        onOpenChange={(open) => {
+          if (!open) {
+            setUnavailableTarget(null)
+            setUnavailableForm({ reason: '', startDate: format(new Date(), 'yyyy-MM-dd'), endDate: '' })
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>
+              Mark Unit {unavailableTarget?.unitNumber} as Unavailable
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Reason</Label>
+              <Input
+                value={unavailableForm.reason}
+                onChange={(e) => setUnavailableForm((f) => ({ ...f, reason: e.target.value }))}
+                placeholder="e.g. Plumbing repair, Renovation"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label>Start Date</Label>
+                <Input
+                  type="date"
+                  value={unavailableForm.startDate}
+                  onChange={(e) => setUnavailableForm((f) => ({ ...f, startDate: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>
+                  End Date
+                  <span className="ml-1 text-xs text-muted-foreground">(optional)</span>
+                </Label>
+                <Input
+                  type="date"
+                  value={unavailableForm.endDate}
+                  onChange={(e) => setUnavailableForm((f) => ({ ...f, endDate: e.target.value }))}
+                />
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Leave end date empty if the duration is not yet known.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUnavailableTarget(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={isSubmitting || !unavailableForm.reason.trim()}
+              onClick={handleMarkUnavailable}
+            >
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Mark Available Confirm Dialog */}
+      <Dialog open={!!availableTarget} onOpenChange={(open) => !open && setAvailableTarget(null)}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>
+              Mark Unit {availableTarget?.unitNumber} as Available
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            This will clear the current unavailability and make the unit available for leasing again.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAvailableTarget(null)}>
+              Cancel
+            </Button>
+            <Button disabled={isSubmitting} onClick={handleMarkAvailable}>
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
+// ── Unit Card ────────────────────────────────────────────────────────────────
+
+interface UnitCardProps {
+  unit: PropertyUnit
+  propertyId: string
+  fallbackCurrency: string
+  canManage: boolean
+  onMarkUnavailable: () => void
+  onMarkAvailable: () => void
+}
+
+function UnitCard({ unit, propertyId, fallbackCurrency, canManage, onMarkUnavailable, onMarkAvailable }: UnitCardProps) {
+  const router = useRouter()
+  const [showHistory, setShowHistory] = useState(false)
+  const [isLoadingLease, setIsLoadingLease] = useState(false)
+  const history = unit.unavailabilityHistory ?? []
+  const currency = fallbackCurrency
+
+  async function handleViewCurrentLease() {
+    setIsLoadingLease(true)
+    try {
+      const occupancy = await occupancyApi.getUnitHistory(unit.id)
+      if (!occupancy.length) {
+        toast.error('No lease history found for this unit')
+        return
+      }
+      const latest = occupancy[occupancy.length - 1]
+      router.push(`/leasing/${latest.leaseId}`)
+    } catch {
+      toast.error('Could not load lease details')
+    } finally {
+      setIsLoadingLease(false)
+    }
+  }
+
+  return (
+    <Card className="flex flex-col">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-base">Unit {unit.unitNumber}</CardTitle>
+          <div className="flex items-center gap-2">
+            <StatusBadge status={unit.status} />
+            {canManage && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-7 w-7">
+                    <MoreHorizontal className="h-4 w-4" />
+                    <span className="sr-only">Unit actions</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/properties/${propertyId}/units/${unit.id}`)}
+                  >
+                    <FileText className="h-4 w-4" />
+                    View Unit Details
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    disabled={unit.status !== 'OCCUPIED' || isLoadingLease}
+                    onClick={handleViewCurrentLease}
+                  >
+                    <FileText className="h-4 w-4" />
+                    {isLoadingLease ? 'Loading…' : 'View Current Lease Details'}
+                  </DropdownMenuItem>
+
+                  {/* Availability actions */}
+                  {unit.status === 'AVAILABLE' && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() =>
+                          router.push(`/leasing?action=create&propertyId=${propertyId}&unitId=${unit.id}`)
+                        }
+                      >
+                        <UserPlus className="h-4 w-4" />
+                        Assign Tenant
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={onMarkUnavailable}>
+                        <CalendarX className="h-4 w-4" />
+                        Mark Unavailable
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                  {unit.status === 'UNAVAILABLE' && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={onMarkAvailable}>
+                        <CalendarCheck className="h-4 w-4" />
+                        Mark Available
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-4 flex-1">
+        {/* Specs */}
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <span className="flex items-center gap-1">
+            <BedDouble className="h-3.5 w-3.5" />
+            {unit.bedrooms} bd
+          </span>
+          <span className="flex items-center gap-1">
+            <Bath className="h-3.5 w-3.5" />
+            {unit.bathrooms} ba
+          </span>
+          {unit.squareFootage && (
+            <span className="flex items-center gap-1">
+              <Maximize2 className="h-3.5 w-3.5" />
+              {unit.squareFootage.toLocaleString()} sqft
+            </span>
+          )}
+        </div>
+
+        <Separator />
+
+        {/* Rent & lease options */}
+        <div className="space-y-2">
+          <p className="text-xl font-semibold">
+            {formatCurrency(unit.monthlyRentAmount, currency)}
+            <span className="text-sm font-normal text-muted-foreground">/mo</span>
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {LEASE_PERIODS.map((period) => (
+              <span
+                key={period}
+                className="inline-flex items-center rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs text-muted-foreground"
+              >
+                {period}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Current unavailability */}
+        {unit.status === 'UNAVAILABLE' && unit.currentUnavailability && (
+          <>
+            <Separator />
+            <div className="rounded-md bg-amber-50 border border-amber-100 p-3 space-y-1">
+              <p className="text-xs font-medium text-amber-700">Currently unavailable</p>
+              <p className="text-xs text-amber-700">{unit.currentUnavailability.reason}</p>
+              <p className="text-xs text-amber-600">
+                From {format(new Date(unit.currentUnavailability.startDate), 'MMM d, yyyy')}
+                {unit.currentUnavailability.endDate
+                  ? ` · Until ${format(new Date(unit.currentUnavailability.endDate), 'MMM d, yyyy')}`
+                  : ' · Open-ended'}
+              </p>
+            </div>
+          </>
+        )}
+
+        {/* Unavailability history */}
+        {history.length > 0 && (
+          <>
+            <Separator />
+            <div>
+              <button
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                onClick={() => setShowHistory((v) => !v)}
+              >
+                {showHistory ? 'Hide' : 'Show'} history ({history.length})
+              </button>
+              {showHistory && (
+                <div className="mt-2 space-y-2">
+                  {history.map((record) => (
+                    <div
+                      key={record.id}
+                      className="rounded-md border border-border p-2.5 space-y-0.5"
+                    >
+                      <p className="text-xs font-medium">{record.reason}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {format(new Date(record.startDate), 'MMM d, yyyy')}
+                        {record.endDate
+                          ? ` – ${format(new Date(record.endDate), 'MMM d, yyyy')}`
+                          : ' – Open-ended'}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
