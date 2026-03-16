@@ -1,8 +1,9 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, type ComponentType } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
   ArrowLeft, BedDouble, Bath, Maximize2, Building2, MapPin, Calendar, ChevronRight,
+  ChevronLeft, Home, UtensilsCrossed, LayoutTemplate,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -115,65 +116,73 @@ export default function UnitDetailPage() {
         <p className="text-sm text-muted-foreground mt-0.5">{property.name}</p>
       </div>
 
-      {/* Property + Unit info */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {/* Property card */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-              Property
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-start gap-2">
-              <Building2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-              <div>
-                <p className="font-medium">{property.name}</p>
-                <p className="text-sm text-muted-foreground capitalize">{property.type?.toLowerCase().replace('_', ' ')}</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-2">
-              <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-              <p className="text-sm text-muted-foreground">
-                {property.street}, {property.city}, {property.state} {property.zipCode}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Unit card */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
+      {/* Top section: info (left) + carousel (right) */}
+      <div className="grid gap-4 lg:grid-cols-[1fr_1.618fr]">
+        {/* Left: property + unit info stacked */}
+        <div className="space-y-4">
+          {/* Property card */}
+          <Card>
+            <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                Unit Details
+                Property
               </CardTitle>
-              <StatusBadge status={unit.status} />
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <BedDouble className="h-4 w-4" />
-                {unit.bedrooms} bed{unit.bedrooms !== 1 ? 's' : ''}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Bath className="h-4 w-4" />
-                {unit.bathrooms} bath{unit.bathrooms !== 1 ? 's' : ''}
-              </span>
-              {unit.squareFootage && (
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-start gap-2">
+                <Building2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium">{property.name}</p>
+                  <p className="text-sm text-muted-foreground capitalize">{property.type?.toLowerCase().replace('_', ' ')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                <p className="text-sm text-muted-foreground">
+                  {property.street}, {property.city}, {property.state} {property.zipCode}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Unit details card */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                  Unit Details
+                </CardTitle>
+                <StatusBadge status={unit.status} />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1.5">
-                  <Maximize2 className="h-4 w-4" />
-                  {unit.squareFootage.toLocaleString()} sqft
+                  <BedDouble className="h-4 w-4" />
+                  {unit.bedrooms} bed{unit.bedrooms !== 1 ? 's' : ''}
                 </span>
-              )}
-            </div>
-            <Separator />
-            <p className="text-xl font-semibold">
-              {formatCurrency(unit.monthlyRentAmount, currency)}
-              <span className="text-sm font-normal text-muted-foreground">/mo</span>
-            </p>
-          </CardContent>
+                <span className="flex items-center gap-1.5">
+                  <Bath className="h-4 w-4" />
+                  {unit.bathrooms} bath{unit.bathrooms !== 1 ? 's' : ''}
+                </span>
+                {unit.squareFootage && (
+                  <span className="flex items-center gap-1.5">
+                    <Maximize2 className="h-4 w-4" />
+                    {unit.squareFootage.toLocaleString()} sqft
+                  </span>
+                )}
+              </div>
+              <Separator />
+              <p className="text-xl font-semibold">
+                {formatCurrency(unit.monthlyRentAmount, currency)}
+                <span className="text-sm font-normal text-muted-foreground">/mo</span>
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right: gallery carousel */}
+        <Card className="overflow-hidden min-h-[33vh]">
+          <UnitGalleryCarousel unit={unit} />
         </Card>
       </div>
 
@@ -308,6 +317,113 @@ export default function UnitDetailPage() {
           </Card>
         )}
       </section>
+    </div>
+  )
+}
+
+// ── Unit Gallery Carousel ─────────────────────────────────────────────────────
+
+type SlideDefinition = {
+  label: string
+  icon: ComponentType<{ className?: string }>
+  bg: string
+  iconColor: string
+}
+
+function buildSlides(unit: PropertyUnit): SlideDefinition[] {
+  const bedrooms: SlideDefinition[] = Array.from({ length: unit.bedrooms }, (_, i) => ({
+    label: unit.bedrooms > 1 ? `Bedroom ${i + 1}` : 'Bedroom',
+    icon: BedDouble,
+    bg: 'from-indigo-50 to-indigo-100 dark:from-indigo-900/30 dark:to-indigo-800/30',
+    iconColor: 'text-indigo-400 dark:text-indigo-500',
+  }))
+
+  return [
+    {
+      label: 'Living Room',
+      icon: Home,
+      bg: 'from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30',
+      iconColor: 'text-blue-400 dark:text-blue-500',
+    },
+    ...bedrooms,
+    {
+      label: 'Kitchen',
+      icon: UtensilsCrossed,
+      bg: 'from-amber-50 to-amber-100 dark:from-amber-900/30 dark:to-amber-800/30',
+      iconColor: 'text-amber-400 dark:text-amber-500',
+    },
+    {
+      label: 'Bathroom',
+      icon: Bath,
+      bg: 'from-teal-50 to-teal-100 dark:from-teal-900/30 dark:to-teal-800/30',
+      iconColor: 'text-teal-400 dark:text-teal-500',
+    },
+    {
+      label: 'Floor Plan',
+      icon: LayoutTemplate,
+      bg: 'from-slate-100 to-slate-200 dark:from-slate-800/50 dark:to-slate-700/50',
+      iconColor: 'text-slate-400 dark:text-slate-500',
+    },
+  ]
+}
+
+function UnitGalleryCarousel({ unit }: { unit: PropertyUnit }) {
+  const [current, setCurrent] = useState(0)
+  const slides = useMemo(() => buildSlides(unit), [unit])
+  const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length)
+  const next = () => setCurrent((c) => (c + 1) % slides.length)
+  const slide = slides[current]
+  const Icon = slide.icon
+
+  return (
+    <div className="relative w-full h-full min-h-72 select-none flex flex-col">
+      {/* Slide */}
+      <div className={`flex-1 bg-gradient-to-br ${slide.bg} flex flex-col items-center justify-center gap-4 transition-colors duration-300`}>
+        <Icon className={`h-20 w-20 ${slide.iconColor} opacity-60`} />
+        <span className="text-sm font-medium text-muted-foreground tracking-widest uppercase">
+          {slide.label}
+        </span>
+      </div>
+
+      {/* Nav arrows */}
+      <button
+        onClick={prev}
+        className="absolute left-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-background/70 hover:bg-background/90 flex items-center justify-center shadow transition-colors"
+        aria-label="Previous image"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-background/70 hover:bg-background/90 flex items-center justify-center shadow transition-colors"
+        aria-label="Next image"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+
+      {/* Thumbnail strip */}
+      <div className="flex border-t border-border">
+        {slides.map((s, i) => {
+          const ThumbIcon = s.icon
+          return (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              aria-label={s.label}
+              className={`flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-colors ${
+                i === current
+                  ? `bg-gradient-to-b ${s.bg} border-t-2 border-foreground/30`
+                  : 'hover:bg-muted/60'
+              }`}
+            >
+              <ThumbIcon className={`h-4 w-4 ${i === current ? s.iconColor : 'text-muted-foreground/50'}`} />
+              <span className={`text-[10px] font-medium leading-none tracking-wide ${i === current ? 'text-foreground/70' : 'text-muted-foreground/50'}`}>
+                {s.label.split(' ')[0]}
+              </span>
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }

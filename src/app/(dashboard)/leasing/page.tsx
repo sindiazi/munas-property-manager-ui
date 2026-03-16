@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Plus, MoreHorizontal, Filter, ArrowUpDown, Search } from 'lucide-react'
+import { FileSignature, MoreHorizontal, SlidersHorizontal, ArrowUpDown, Search } from 'lucide-react'
 import { addMonths, addYears, format, differenceInMonths, isValid } from 'date-fns'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
@@ -295,7 +295,7 @@ export default function LeasingPage() {
         action={
           canManage ? (
             <Button onClick={() => setShowCreate(true)}>
-              <Plus className="h-4 w-4 mr-2" /> New Lease
+              <FileSignature className="h-4 w-4 mr-2" /> New Lease
             </Button>
           ) : undefined
         }
@@ -303,7 +303,7 @@ export default function LeasingPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3 mb-4">
-        <Filter className="h-4 w-4 text-muted-foreground shrink-0" />
+        <SlidersHorizontal className="h-4 w-4 text-muted-foreground shrink-0" />
 
         <div className="relative">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />

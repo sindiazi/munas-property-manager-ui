@@ -1,11 +1,12 @@
 'use client'
 import { useEffect, useState, useMemo } from 'react'
-import { Plus, CreditCard, ArrowUpDown, X } from 'lucide-react'
+import { CreditCard, ArrowUpDown, X, CircleDollarSign, SlidersHorizontal } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { TableLoadingState } from '@/components/shared/LoadingState'
 import { Pagination, usePagination } from '@/components/shared/Pagination'
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -195,7 +196,7 @@ export default function PaymentsPage() {
         action={
           canManage ? (
             <Button onClick={() => setShowCreate(true)}>
-              <Plus className="h-4 w-4 mr-2" /> New Payment
+              <CircleDollarSign className="h-4 w-4 mr-2" /> Accept Payment
             </Button>
           ) : undefined
         }
@@ -203,6 +204,7 @@ export default function PaymentsPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3 mb-4">
+        <SlidersHorizontal className="h-4 w-4 text-muted-foreground shrink-0" />
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-44">
             <SelectValue placeholder="Status" />
@@ -342,20 +344,27 @@ export default function PaymentsPage() {
                       {canManage && (
                         <TableCell>
                           {(payment.status === 'PENDING' || payment.status === 'OVERDUE') && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => {
-                                setReceiveId(payment.id)
-                                setReceiveForm({
-                                  amountPaid: payment.amountDue,
-                                  currencyCode: payment.currencyCode,
-                                  paymentDate: new Date().toISOString().split('T')[0],
-                                })
-                              }}
-                            >
-                              Record
-                            </Button>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setReceiveId(payment.id)
+                                      setReceiveForm({
+                                        amountPaid: payment.amountDue,
+                                        currencyCode: payment.currencyCode,
+                                        paymentDate: new Date().toISOString().split('T')[0],
+                                      })
+                                    }}
+                                  >
+                                    <CircleDollarSign className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Record payment</TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                           )}
                         </TableCell>
                       )}

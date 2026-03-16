@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, Building2, MoreHorizontal } from 'lucide-react'
+import { Building2, MoreHorizontal, PlusSquare } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { TableLoadingState } from '@/components/shared/LoadingState'
@@ -93,7 +93,7 @@ export default function PropertiesPage() {
         action={
           canManage ? (
             <Button onClick={() => setShowDialog(true)}>
-              <Plus className="h-4 w-4 mr-2" /> Add Property
+              <PlusSquare className="h-4 w-4 mr-2" /> Add Property
             </Button>
           ) : undefined
         }

@@ -15,12 +15,12 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 
 const navItems = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Properties', href: '/properties', icon: Home },
-  { label: 'Tenants', href: '/tenants', icon: Users },
-  { label: 'Leasing', href: '/leasing', icon: FileText },
-  { label: 'Payments', href: '/payments', icon: CreditCard },
-  { label: 'Maintenance', href: '/maintenance', icon: Wrench },
+  { label: 'Dashboard',   href: '/dashboard',   icon: LayoutDashboard, managerOnly: false },
+  { label: 'Properties',  href: '/properties',  icon: Home,            managerOnly: false },
+  { label: 'Tenants',     href: '/tenants',     icon: Users,           managerOnly: false },
+  { label: 'Leasing',     href: '/leasing',     icon: FileText,        managerOnly: false },
+  { label: 'Payments',    href: '/payments',    icon: CreditCard,      managerOnly: false },
+  { label: 'Maintenance', href: '/maintenance', icon: Wrench,          managerOnly: true  },
 ]
 
 const adminItems = [
@@ -34,6 +34,7 @@ const bottomItems = [
 export function AppSidebar() {
   const pathname = usePathname()
   const { user, logout } = useAuthStore()
+  const canManage = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/')
 
@@ -54,7 +55,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
+              {navItems.filter((item) => !item.managerOnly || canManage).map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     asChild

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, Users, Mail, Phone, Search } from 'lucide-react'
+import { UserPlus, Users, Mail, Phone, Search } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { TableLoadingState } from '@/components/shared/LoadingState'
@@ -107,7 +107,7 @@ export default function TenantsPage() {
         action={
           canCreate ? (
             <Button onClick={() => setShowDialog(true)}>
-              <Plus className="h-4 w-4 mr-2" /> Register Tenant
+              <UserPlus className="h-4 w-4 mr-2" /> Register Tenant
             </Button>
           ) : undefined
         }

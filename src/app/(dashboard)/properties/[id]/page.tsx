@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, type ComponentType } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, BedDouble, Bath, Maximize2, MoreHorizontal, CalendarX, CalendarCheck, FileText, UserPlus } from 'lucide-react'
+import { ArrowLeft, BedDouble, Bath, Maximize2, MoreHorizontal, CalendarX, CalendarCheck, FileText, UserPlus, ChevronLeft, ChevronRight, Home, UtensilsCrossed, LayoutTemplate, SlidersHorizontal, X } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/button'
@@ -15,6 +15,9 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { propertiesApi } from '@/lib/api/properties.api'
 import { occupancyApi } from '@/lib/api/occupancy.api'
@@ -160,6 +163,41 @@ export default function PropertyDetailPage() {
   const currency = useSettingsStore((s) => s.settings?.currency ?? 'USD')
   const canManage = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
 
+  // Filters & sort
+  const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [filterBedrooms, setFilterBedrooms] = useState<string>('all')
+  const [filterBathrooms, setFilterBathrooms] = useState<string>('all')
+  const [sortBy, setSortBy] = useState<string>('default')
+
+  const bedroomOptions = useMemo(
+    () => [...new Set((property?.units ?? []).map((u) => u.bedrooms))].sort((a, b) => a - b),
+    [property],
+  )
+  const bathroomOptions = useMemo(
+    () => [...new Set((property?.units ?? []).map((u) => u.bathrooms))].sort((a, b) => a - b),
+    [property],
+  )
+  const filteredUnits = useMemo(() => {
+    const units = property?.units ?? []
+    let result = [...units]
+    if (filterStatus !== 'all') result = result.filter((u) => u.status === filterStatus)
+    if (filterBedrooms !== 'all') result = result.filter((u) => u.bedrooms === Number(filterBedrooms))
+    if (filterBathrooms !== 'all') result = result.filter((u) => u.bathrooms === Number(filterBathrooms))
+    if (sortBy === 'price_asc') result.sort((a, b) => a.monthlyRentAmount - b.monthlyRentAmount)
+    else if (sortBy === 'price_desc') result.sort((a, b) => b.monthlyRentAmount - a.monthlyRentAmount)
+    else if (sortBy === 'size_asc') result.sort((a, b) => (a.squareFootage ?? 0) - (b.squareFootage ?? 0))
+    else if (sortBy === 'size_desc') result.sort((a, b) => (b.squareFootage ?? 0) - (a.squareFootage ?? 0))
+    return result
+  }, [property, filterStatus, filterBedrooms, filterBathrooms, sortBy])
+  const isFiltered = filterStatus !== 'all' || filterBedrooms !== 'all' || filterBathrooms !== 'all' || sortBy !== 'default'
+
+  function resetFilters() {
+    setFilterStatus('all')
+    setFilterBedrooms('all')
+    setFilterBathrooms('all')
+    setSortBy('default')
+  }
+
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -225,6 +263,79 @@ export default function PropertyDetailPage() {
         ))}
       </div>
 
+      {/* Filter / sort bar */}
+      {total > 0 && (
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          <SlidersHorizontal className="h-4 w-4 text-muted-foreground shrink-0" />
+
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <SelectTrigger className="h-8 w-36 text-xs">
+              <SelectValue placeholder="Availability" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All statuses</SelectItem>
+              <SelectItem value="AVAILABLE">Available</SelectItem>
+              <SelectItem value="OCCUPIED">Occupied</SelectItem>
+              <SelectItem value="UNAVAILABLE">Unavailable</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={filterBedrooms} onValueChange={setFilterBedrooms}>
+            <SelectTrigger className="h-8 w-32 text-xs">
+              <SelectValue placeholder="Bedrooms" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All bedrooms</SelectItem>
+              {bedroomOptions.map((n) => (
+                <SelectItem key={n} value={String(n)}>
+                  {n} {n === 1 ? 'bedroom' : 'bedrooms'}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={filterBathrooms} onValueChange={setFilterBathrooms}>
+            <SelectTrigger className="h-8 w-32 text-xs">
+              <SelectValue placeholder="Bathrooms" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All bathrooms</SelectItem>
+              {bathroomOptions.map((n) => (
+                <SelectItem key={n} value={String(n)}>
+                  {n} {n === 1 ? 'bathroom' : 'bathrooms'}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="h-8 w-36 text-xs">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="default">Default order</SelectItem>
+              <SelectItem value="price_asc">Price: low → high</SelectItem>
+              <SelectItem value="price_desc">Price: high → low</SelectItem>
+              <SelectItem value="size_asc">Size: small → large</SelectItem>
+              <SelectItem value="size_desc">Size: large → small</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {isFiltered && (
+            <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs text-muted-foreground" onClick={resetFilters}>
+              <X className="h-3.5 w-3.5" />
+              Reset
+            </Button>
+          )}
+
+          {isFiltered && (
+            <span className="ml-auto text-xs text-muted-foreground">
+              {filteredUnits.length} of {total} units
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Units grid */}
       {total === 0 ? (
         <Card>
@@ -232,9 +343,16 @@ export default function PropertyDetailPage() {
             <p>No units have been added to this property yet.</p>
           </CardContent>
         </Card>
+      ) : filteredUnits.length === 0 ? (
+        <Card>
+          <CardContent className="py-16 text-center text-muted-foreground">
+            <p>No units match your current filters.</p>
+            <Button variant="link" onClick={resetFilters}>Clear filters</Button>
+          </CardContent>
+        </Card>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {property.units.map((unit) => (
+          {filteredUnits.map((unit) => (
             <UnitCard
               key={unit.id}
               unit={unit}
@@ -342,6 +460,99 @@ export default function PropertyDetailPage() {
   )
 }
 
+// ── Unit Image Carousel ───────────────────────────────────────────────────────
+
+type SlideDefinition = {
+  label: string
+  icon: ComponentType<{ className?: string }>
+  bg: string
+  iconColor: string
+}
+
+function buildSlides(unit: PropertyUnit): SlideDefinition[] {
+  const bedrooms: SlideDefinition[] = Array.from({ length: unit.bedrooms }, (_, i) => ({
+    label: unit.bedrooms > 1 ? `Bedroom ${i + 1}` : 'Bedroom',
+    icon: BedDouble,
+    bg: 'from-indigo-50 to-indigo-100 dark:from-indigo-900/30 dark:to-indigo-800/30',
+    iconColor: 'text-indigo-400 dark:text-indigo-500',
+  }))
+
+  return [
+    {
+      label: 'Living Room',
+      icon: Home,
+      bg: 'from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30',
+      iconColor: 'text-blue-400 dark:text-blue-500',
+    },
+    ...bedrooms,
+    {
+      label: 'Kitchen',
+      icon: UtensilsCrossed,
+      bg: 'from-amber-50 to-amber-100 dark:from-amber-900/30 dark:to-amber-800/30',
+      iconColor: 'text-amber-400 dark:text-amber-500',
+    },
+    {
+      label: 'Bathroom',
+      icon: Bath,
+      bg: 'from-teal-50 to-teal-100 dark:from-teal-900/30 dark:to-teal-800/30',
+      iconColor: 'text-teal-400 dark:text-teal-500',
+    },
+    {
+      label: 'Floor Plan',
+      icon: LayoutTemplate,
+      bg: 'from-slate-100 to-slate-200 dark:from-slate-800/50 dark:to-slate-700/50',
+      iconColor: 'text-slate-400 dark:text-slate-500',
+    },
+  ]
+}
+
+function UnitImageCarousel({ unit }: { unit: PropertyUnit }) {
+  const [current, setCurrent] = useState(0)
+  const slides = useMemo(() => buildSlides(unit), [unit])
+  const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length)
+  const next = () => setCurrent((c) => (c + 1) % slides.length)
+  const slide = slides[current]
+  const Icon = slide.icon
+
+  return (
+    <div className="relative w-full h-44 overflow-hidden select-none">
+      {/* Slide background */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${slide.bg} flex flex-col items-center justify-center gap-2 transition-colors duration-300`}>
+        <Icon className={`h-12 w-12 ${slide.iconColor} opacity-60`} />
+        <span className="text-xs font-medium text-muted-foreground tracking-wide uppercase">{slide.label}</span>
+      </div>
+
+      {/* Prev / Next */}
+      <button
+        onClick={prev}
+        className="absolute left-2 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full bg-background/70 hover:bg-background/90 flex items-center justify-center shadow-sm transition-colors"
+        aria-label="Previous image"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full bg-background/70 hover:bg-background/90 flex items-center justify-center shadow-sm transition-colors"
+        aria-label="Next image"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </button>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            aria-label={`Go to slide ${i + 1}`}
+            className={`rounded-full transition-all duration-200 ${i === current ? 'w-3 h-1.5 bg-foreground/60' : 'w-1.5 h-1.5 bg-foreground/25 hover:bg-foreground/40'}`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── Unit Card ────────────────────────────────────────────────────────────────
 
 interface UnitCardProps {
@@ -378,7 +589,8 @@ function UnitCard({ unit, propertyId, fallbackCurrency, canManage, onMarkUnavail
   }
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col overflow-hidden">
+      <UnitImageCarousel unit={unit} />
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base">Unit {unit.unitNumber}</CardTitle>
