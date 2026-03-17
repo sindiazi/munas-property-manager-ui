@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { Building2, Calendar, DollarSign, User } from 'lucide-react'
+import { Building2, Calendar, DollarSign, User, Copy, Check } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/button'
@@ -58,6 +58,14 @@ export default function LeaseDetailPage() {
   const [property, setProperty] = useState<Property | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [showTerminate, setShowTerminate] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  function handleCopyId() {
+    if (!lease) return
+    navigator.clipboard.writeText(lease.id)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
   const [terminateReason, setTerminateReason] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -144,7 +152,7 @@ export default function LeaseDetailPage() {
     <div>
       <PageHeader
         title="Lease Details"
-        description={`ID: ${lease.id}`}
+        description="Lease Details"
         action={
           canManage ? (
             <div className="flex gap-2">
@@ -212,6 +220,24 @@ export default function LeaseDetailPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
+            <DetailRow
+              label="Lease ID"
+              value={
+                <span className="flex items-center gap-1.5">
+                  <span className="font-mono text-xs">{lease.id}</span>
+                  <button
+                    onClick={handleCopyId}
+                    className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                    aria-label="Copy lease ID"
+                  >
+                    {copied
+                      ? <Check className="h-3.5 w-3.5 text-green-600" />
+                      : <Copy className="h-3.5 w-3.5" />}
+                  </button>
+                </span>
+              }
+            />
+            <Separator />
             <DetailRow label="Status" value={<StatusBadge status={lease.status} />} />
             <Separator />
             <DetailRow

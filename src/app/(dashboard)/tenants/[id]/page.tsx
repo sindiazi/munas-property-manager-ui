@@ -399,11 +399,16 @@ export default function TenantDetailPage() {
                     <th className="px-4 py-3 text-left font-medium">Status</th>
                     <th className="px-4 py-3 text-left font-medium">Priority</th>
                     <th className="px-4 py-3 text-left font-medium">Date</th>
+                    <th className="px-4 py-3 text-right font-medium" />
                   </tr>
                 </thead>
                 <tbody>
                   {pagedMaintenance.map((r) => (
-                    <tr key={r.id} className="border-b last:border-0">
+                    <tr
+                      key={r.id}
+                      className="border-b last:border-0 hover:bg-muted/40 cursor-pointer transition-colors"
+                      onClick={() => router.push(`/maintenance/${r.id}`)}
+                    >
                       <td className="px-4 py-2.5 font-medium">
                         {r.problemDescription}
                         {r.resolutionNotes && (
@@ -428,6 +433,9 @@ export default function TenantDetailPage() {
                             Completed {safeFormat(r.completedAt, 'MMM d, yyyy')}
                           </p>
                         )}
+                      </td>
+                      <td className="px-4 py-2.5 text-right">
+                        <ChevronRight className="h-4 w-4 text-muted-foreground inline" />
                       </td>
                     </tr>
                   ))}
