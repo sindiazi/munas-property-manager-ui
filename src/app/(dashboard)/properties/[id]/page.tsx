@@ -30,6 +30,17 @@ import { format } from 'date-fns'
 
 const LEASE_PERIODS = ['6 months', '1 year', '2 years']
 
+// Session-scoped filter cache keyed by property ID.
+// Populated on every filter change; read on mount to restore state.
+// Cleared on page refresh (module re-initialises).
+interface FilterState {
+  filterStatus: string
+  filterBedrooms: string
+  filterBathrooms: string
+  sortBy: string
+}
+const filterCache = new Map<string, FilterState>()
+
 function generateId() {
   return Math.random().toString(36).slice(2, 10)
 }
@@ -165,11 +176,17 @@ export default function PropertyDetailPage() {
   const currency = useSettingsStore((s) => s.settings?.currency ?? 'USD')
   const canManage = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
 
-  // Filters & sort
-  const [filterStatus, setFilterStatus] = useState<string>('all')
-  const [filterBedrooms, setFilterBedrooms] = useState<string>('all')
-  const [filterBathrooms, setFilterBathrooms] = useState<string>('all')
-  const [sortBy, setSortBy] = useState<string>('default')
+  // Filters & sort — restored from session cache if available, otherwise default to AVAILABLE
+  const cached = filterCache.get(id)
+  const [filterStatus, setFilterStatus] = useState<string>(cached?.filterStatus ?? 'AVAILABLE')
+  const [filterBedrooms, setFilterBedrooms] = useState<string>(cached?.filterBedrooms ?? 'all')
+  const [filterBathrooms, setFilterBathrooms] = useState<string>(cached?.filterBathrooms ?? 'all')
+  const [sortBy, setSortBy] = useState<string>(cached?.sortBy ?? 'default')
+
+  // Persist filter state to session cache whenever it changes
+  useEffect(() => {
+    filterCache.set(id, { filterStatus, filterBedrooms, filterBathrooms, sortBy })
+  }, [id, filterStatus, filterBedrooms, filterBathrooms, sortBy])
 
   const bedroomOptions = useMemo(
     () => [...new Set((property?.units ?? []).map((u) => u.bedrooms))].sort((a, b) => a - b),
@@ -191,10 +208,10 @@ export default function PropertyDetailPage() {
     else if (sortBy === 'size_desc') result.sort((a, b) => (b.squareFootage ?? 0) - (a.squareFootage ?? 0))
     return result
   }, [property, filterStatus, filterBedrooms, filterBathrooms, sortBy])
-  const isFiltered = filterStatus !== 'all' || filterBedrooms !== 'all' || filterBathrooms !== 'all' || sortBy !== 'default'
+  const isFiltered = filterStatus !== 'AVAILABLE' || filterBedrooms !== 'all' || filterBathrooms !== 'all' || sortBy !== 'default'
 
   function resetFilters() {
-    setFilterStatus('all')
+    setFilterStatus('AVAILABLE')
     setFilterBedrooms('all')
     setFilterBathrooms('all')
     setSortBy('default')
