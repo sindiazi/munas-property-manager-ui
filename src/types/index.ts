@@ -6,7 +6,7 @@ export type PaymentType = 'RENT' | 'SECURITY_DEPOSIT' | 'LATE_FEE' | 'MAINTENANC
 export type PropertyType = 'APARTMENT' | 'HOUSE' | 'COMMERCIAL' | 'CONDO' | 'TOWNHOUSE' | 'STUDIO'
 export type TenantStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING'
 export type EventType = 'PAGE_VIEW' | 'USER_ACTION' | 'API_CALL' | 'API_ERROR' | 'AUTH' | 'NAVIGATION'
-export type MaintenanceStatus = 'OPEN' | 'IN_PROGRESS' | 'CLOSED'
+export type MaintenanceStatus = 'OPEN' | 'ASSIGNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'
 export type MaintenancePriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'EMERGENCY'
 
 export interface User {
@@ -117,6 +117,19 @@ export interface OccupancyRecord {
   leaseStart: string
   leaseEnd?: string
   status: LeaseStatus
+}
+
+export interface MaintenanceIssueTemplate {
+  id: string
+  title: string
+  description: string
+  priority: MaintenancePriority
+}
+
+export interface MaintenanceCategory {
+  id: string
+  name: string
+  issues: MaintenanceIssueTemplate[]
 }
 
 export interface MaintenanceRecord {

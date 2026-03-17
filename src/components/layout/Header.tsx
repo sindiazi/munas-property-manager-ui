@@ -24,7 +24,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4">
       <SidebarTrigger className="-ml-1" />
-      <Separator orientation="vertical" className="h-4" />
+      <Separator orientation="vertical" className="h-full" />
       <h1 className="text-sm font-semibold">{label}</h1>
       <div className="ml-auto flex items-center gap-2">
         <Button variant="ghost" size="icon">

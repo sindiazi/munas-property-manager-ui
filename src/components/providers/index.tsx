@@ -9,11 +9,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const fetchSettings = useSettingsStore((s) => s.fetchSettings)
   const theme = useSettingsStore((s) => s.settings?.theme)
 
-  // Run once on mount — auth first, then settings
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+
+  // Run once on mount — auth first, then settings only if authenticated
   useEffect(() => {
-    initialize().then(() => fetchSettings())
+    initialize()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchSettings()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated])
 
   // Keep <html class="dark"> in sync with the stored theme preference
   useEffect(() => {

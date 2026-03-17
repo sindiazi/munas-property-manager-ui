@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Building2 } from 'lucide-react'
+import { Logo } from '@/components/layout/Logo'
 import { toast } from 'sonner'
 
 export default function LoginPage() {
@@ -34,11 +34,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-50">
       <div className="w-full max-w-md px-4">
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900">
-            <Building2 className="h-6 w-6 text-white" />
-          </div>
-          <span className="text-xl font-semibold text-zinc-900">Property Manager</span>
+        <div className="flex items-center justify-center gap-3 mb-8">
+          <Logo className="h-12 w-auto" />
+          <span className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">Property Manager</span>
         </div>
 
         <Card>

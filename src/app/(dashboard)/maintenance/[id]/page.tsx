@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Wrench, MapPin } from 'lucide-react'
+import { Wrench, MapPin } from 'lucide-react'
 import { format, isValid } from 'date-fns'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
@@ -15,7 +15,7 @@ import { Separator } from '@/components/ui/separator'
 import { maintenanceApi } from '@/lib/api/maintenance.api'
 import { propertiesApi } from '@/lib/api/properties.api'
 import { tenantsApi } from '@/lib/api/tenants.api'
-import { useAuthStore } from '@/store'
+import { useAuthStore, useBreadcrumbStore } from '@/store'
 import { useEventLogger } from '@/hooks/useEventLogger'
 import { toast } from 'sonner'
 import type { MaintenanceRecord, Property, Tenant } from '@/types'
@@ -41,6 +41,7 @@ export default function MaintenanceDetailPage() {
   const logEvent = useEventLogger()
   const { user } = useAuthStore()
   const canManage = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
+  const setLabel = useBreadcrumbStore((s) => s.setLabel)
 
   const [ticket, setTicket] = useState<MaintenanceRecord | null>(null)
   const [property, setProperty] = useState<Property | null>(null)
@@ -50,6 +51,7 @@ export default function MaintenanceDetailPage() {
 
   const [showCloseDialog, setShowCloseDialog] = useState(false)
   const [resolutionNotes, setResolutionNotes] = useState('')
+  const [showReopenDialog, setShowReopenDialog] = useState(false)
 
   useEffect(() => {
     logEvent('PAGE_VIEW', 'maintenance_detail', { ticketId: id })
@@ -57,6 +59,8 @@ export default function MaintenanceDetailPage() {
       .getById(id)
       .then(async (t) => {
         setTicket(t)
+        const desc = t.problemDescription
+        setLabel(id, desc.length > 40 ? `${desc.slice(0, 40)}…` : desc)
         await Promise.all([
           t.propertyId
             ? propertiesApi.getById(t.propertyId).then(setProperty).catch(() => {})
@@ -71,16 +75,37 @@ export default function MaintenanceDetailPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function apiErrorMessage(err: any, fallback: string): string {
+    return err?.response?.data?.detail ?? err?.message ?? fallback
+  }
+
   async function handleMarkInProgress() {
     if (!ticket) return
     setIsSubmitting(true)
     try {
-      const updated = await maintenanceApi.updateStatus(ticket.id, { status: 'IN_PROGRESS' })
+      const updated = await maintenanceApi.updateStatus(ticket.id, { requestId: ticket.id, newStatus: 'IN_PROGRESS' })
       setTicket(updated)
       logEvent('USER_ACTION', 'mark_ticket_in_progress', { ticketId: ticket.id })
       toast.success('Ticket marked as in progress')
-    } catch {
-      toast.error('Failed to update ticket')
+    } catch (err) {
+      toast.error(apiErrorMessage(err, 'Failed to update ticket'))
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  async function handleReopen() {
+    if (!ticket) return
+    setIsSubmitting(true)
+    try {
+      const updated = await maintenanceApi.updateStatus(ticket.id, { requestId: ticket.id, newStatus: 'OPEN' })
+      setTicket(updated)
+      setShowReopenDialog(false)
+      logEvent('USER_ACTION', 'reopen_maintenance_ticket', { ticketId: ticket.id })
+      toast.success('Ticket reopened')
+    } catch (err) {
+      toast.error(apiErrorMessage(err, 'Failed to reopen ticket'))
     } finally {
       setIsSubmitting(false)
     }
@@ -91,7 +116,8 @@ export default function MaintenanceDetailPage() {
     setIsSubmitting(true)
     try {
       const updated = await maintenanceApi.updateStatus(ticket.id, {
-        status: 'CLOSED',
+        requestId: ticket.id,
+        newStatus: 'COMPLETED',
         resolutionNotes: resolutionNotes.trim(),
       })
       setTicket(updated)
@@ -99,8 +125,8 @@ export default function MaintenanceDetailPage() {
       setResolutionNotes('')
       logEvent('USER_ACTION', 'close_maintenance_ticket', { ticketId: ticket.id })
       toast.success('Ticket closed')
-    } catch {
-      toast.error('Failed to close ticket')
+    } catch (err) {
+      toast.error(apiErrorMessage(err, 'Failed to close ticket'))
     } finally {
       setIsSubmitting(false)
     }
@@ -134,25 +160,13 @@ export default function MaintenanceDetailPage() {
 
   return (
     <div>
-      <div className="mb-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-1.5 text-muted-foreground"
-          onClick={() => router.push('/maintenance')}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to maintenance
-        </Button>
-      </div>
-
       <PageHeader
         title="Maintenance Ticket"
         description={`#${ticket.id.slice(0, 8).toUpperCase()} · Opened ${safeFormat(ticket.requestedAt, 'MMM d, yyyy')}`}
         action={
-          canManage && ticket.status !== 'CLOSED' ? (
+          canManage ? (
             <div className="flex gap-2">
-              {ticket.status === 'OPEN' && (
+              {(ticket.status === 'OPEN' || ticket.status === 'ASSIGNED') && (
                 <Button variant="outline" onClick={handleMarkInProgress} disabled={isSubmitting}>
                   {isSubmitting ? 'Updating…' : 'Mark In Progress'}
                 </Button>
@@ -160,6 +174,11 @@ export default function MaintenanceDetailPage() {
               {ticket.status === 'IN_PROGRESS' && (
                 <Button onClick={() => setShowCloseDialog(true)} disabled={isSubmitting}>
                   Close Ticket
+                </Button>
+              )}
+              {(ticket.status === 'COMPLETED' || ticket.status === 'CANCELLED') && (
+                <Button variant="outline" onClick={() => setShowReopenDialog(true)} disabled={isSubmitting}>
+                  Reopen Ticket
                 </Button>
               )}
             </div>
@@ -317,6 +336,26 @@ export default function MaintenanceDetailPage() {
               onClick={handleCloseTicket}
             >
               {isSubmitting ? 'Closing…' : 'Close Ticket'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reopen ticket dialog */}
+      <Dialog open={showReopenDialog} onOpenChange={setShowReopenDialog}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Reopen Ticket</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            This will set the ticket back to <span className="font-medium text-foreground">Open</span> so it can be worked on again. Are you sure?
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowReopenDialog(false)}>
+              Cancel
+            </Button>
+            <Button disabled={isSubmitting} onClick={handleReopen}>
+              {isSubmitting ? 'Reopening…' : 'Reopen Ticket'}
             </Button>
           </DialogFooter>
         </DialogContent>

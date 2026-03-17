@@ -24,8 +24,9 @@ const statusStyles: Record<string, string> = {
   false:          'bg-zinc-100 text-zinc-500 hover:bg-zinc-100 border-transparent dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800',
   // Maintenance statuses
   OPEN:           'bg-sky-100 text-sky-700 hover:bg-sky-100 border-transparent dark:bg-sky-900/40 dark:text-sky-400 dark:hover:bg-sky-900/40',
+  ASSIGNED:       'bg-purple-100 text-purple-700 hover:bg-purple-100 border-transparent dark:bg-purple-900/40 dark:text-purple-400 dark:hover:bg-purple-900/40',
   IN_PROGRESS:    'bg-amber-100 text-amber-700 hover:bg-amber-100 border-transparent dark:bg-amber-900/40 dark:text-amber-400 dark:hover:bg-amber-900/40',
-  CLOSED:         'bg-zinc-100 text-zinc-500 hover:bg-zinc-100 border-transparent dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800',
+  COMPLETED:      'bg-green-100 text-green-700 hover:bg-green-100 border-transparent dark:bg-green-900/40 dark:text-green-400 dark:hover:bg-green-900/40',
   // Maintenance priorities
   LOW:            'bg-zinc-100 text-zinc-500 hover:bg-zinc-100 border-transparent dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800',
   MEDIUM:         'bg-yellow-100 text-yellow-700 hover:bg-yellow-100 border-transparent dark:bg-yellow-900/40 dark:text-yellow-400 dark:hover:bg-yellow-900/40',

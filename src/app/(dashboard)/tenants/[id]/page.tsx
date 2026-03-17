@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
-  ArrowLeft, User, Mail, Phone, CreditCard, ShieldCheck, ShieldOff,
+  User, Mail, Phone, CreditCard, ShieldCheck, ShieldOff,
   Calendar, ChevronRight, Wrench,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -23,7 +23,7 @@ import type { UpdateTenantCommand } from '@/lib/api/tenants.api'
 import { leasesApi } from '@/lib/api/leases.api'
 import { maintenanceApi } from '@/lib/api/maintenance.api'
 import { propertiesApi } from '@/lib/api/properties.api'
-import { useAuthStore, useSettingsStore } from '@/store'
+import { useAuthStore, useSettingsStore, useBreadcrumbStore } from '@/store'
 import { useEventLogger } from '@/hooks/useEventLogger'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { toast } from 'sonner'
@@ -54,11 +54,11 @@ function maskId(value?: string | null) {
 
 function MaintenanceStatusBadge({ status }: { status: string }) {
   const variants: Record<string, string> = {
-    OPEN: 'bg-red-50 text-red-700 border-red-100',
-    IN_PROGRESS: 'bg-blue-50 text-blue-700 border-blue-100',
-    RESOLVED: 'bg-green-50 text-green-700 border-green-100',
+    OPEN: 'bg-sky-50 text-sky-700 border-sky-100',
+    ASSIGNED: 'bg-purple-50 text-purple-700 border-purple-100',
+    IN_PROGRESS: 'bg-amber-50 text-amber-700 border-amber-100',
     COMPLETED: 'bg-green-50 text-green-700 border-green-100',
-    CLOSED: 'bg-zinc-100 text-zinc-600 border-zinc-200',
+    CANCELLED: 'bg-zinc-100 text-zinc-600 border-zinc-200',
   }
   const cls = variants[status?.toUpperCase()] ?? 'bg-zinc-100 text-zinc-600 border-zinc-200'
   return (
@@ -74,6 +74,7 @@ export default function TenantDetailPage() {
   const logEvent = useEventLogger()
   const { user } = useAuthStore()
   const currency = useSettingsStore((s) => s.settings?.currency ?? 'USD')
+  const setLabel = useBreadcrumbStore((s) => s.setLabel)
 
   const [tenant, setTenant] = useState<Tenant | null>(null)
   const [leases, setLeases] = useState<Lease[]>([])
@@ -107,6 +108,7 @@ export default function TenantDetailPage() {
           propertiesApi.getAll().catch(() => [] as Property[]),
         ])
         setTenant(t)
+        setLabel(id, `${t.firstName} ${t.lastName}`)
         setEditForm({
           firstName: t.firstName,
           lastName: t.lastName,
@@ -194,17 +196,6 @@ export default function TenantDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Back */}
-      <Button
-        variant="ghost"
-        size="sm"
-        className="gap-1.5 text-muted-foreground"
-        onClick={() => router.push('/tenants')}
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to tenants
-      </Button>
-
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
