@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store'
 import { AppSidebar } from '@/components/layout/AppSidebar'
 import { Header } from '@/components/layout/Header'
+import { BreadcrumbStrip } from '@/components/layout/BreadcrumbStrip'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -31,6 +32,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <AppSidebar />
       <SidebarInset>
         <Header />
+        <BreadcrumbStrip />
         <main className="flex-1 p-6 bg-background min-h-screen">
           {children}
         </main>

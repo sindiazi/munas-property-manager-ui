@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Building2, Calendar, DollarSign, User } from 'lucide-react'
+import { Building2, Calendar, DollarSign, User, Copy, Check } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,7 @@ import { Separator } from '@/components/ui/separator'
 import { leasesApi } from '@/lib/api/leases.api'
 import { tenantsApi } from '@/lib/api/tenants.api'
 import { propertiesApi } from '@/lib/api/properties.api'
-import { useAuthStore, useSettingsStore } from '@/store'
+import { useAuthStore, useSettingsStore, useBreadcrumbStore } from '@/store'
 import { useEventLogger } from '@/hooks/useEventLogger'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { toast } from 'sonner'
@@ -58,6 +58,14 @@ export default function LeaseDetailPage() {
   const [property, setProperty] = useState<Property | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [showTerminate, setShowTerminate] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  function handleCopyId() {
+    if (!lease) return
+    navigator.clipboard.writeText(lease.id)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
   const [terminateReason, setTerminateReason] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -73,6 +81,7 @@ export default function LeaseDetailPage() {
         ])
         setTenant(t)
         setProperty(p)
+        setLabel(id, `${t.firstName} ${t.lastName}`)
       })
       .catch(() => toast.error('Failed to load lease'))
       .finally(() => setIsLoading(false))
@@ -113,6 +122,7 @@ export default function LeaseDetailPage() {
 
   const currency = useSettingsStore((s) => s.settings?.currency ?? 'USD')
   const canManage = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
+  const setLabel = useBreadcrumbStore((s) => s.setLabel)
 
   if (isLoading) {
     return (
@@ -140,21 +150,9 @@ export default function LeaseDetailPage() {
 
   return (
     <div>
-      <div className="mb-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-1.5 text-muted-foreground"
-          onClick={() => router.push('/leasing')}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to leases
-        </Button>
-      </div>
-
       <PageHeader
         title="Lease Details"
-        description={`ID: ${lease.id}`}
+        description="Lease Details"
         action={
           canManage ? (
             <div className="flex gap-2">
@@ -222,6 +220,24 @@ export default function LeaseDetailPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
+            <DetailRow
+              label="Lease ID"
+              value={
+                <span className="flex items-center gap-1.5">
+                  <span className="font-mono text-xs">{lease.id}</span>
+                  <button
+                    onClick={handleCopyId}
+                    className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                    aria-label="Copy lease ID"
+                  >
+                    {copied
+                      ? <Check className="h-3.5 w-3.5 text-green-600" />
+                      : <Copy className="h-3.5 w-3.5" />}
+                  </button>
+                </span>
+              }
+            />
+            <Separator />
             <DetailRow label="Status" value={<StatusBadge status={lease.status} />} />
             <Separator />
             <DetailRow

@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -11,132 +10,15 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
 import { maintenanceApi } from '@/lib/api/maintenance.api'
+import { maintenanceCategoriesApi } from '@/lib/api/maintenanceCategories.api'
 import { propertiesApi } from '@/lib/api/properties.api'
 import { tenantsApi } from '@/lib/api/tenants.api'
 import { occupancyApi } from '@/lib/api/occupancy.api'
 import { useAuthStore } from '@/store'
 import { useEventLogger } from '@/hooks/useEventLogger'
 import { toast } from 'sonner'
-import type { Property, PropertyUnit, Tenant, MaintenancePriority } from '@/types'
+import type { Property, PropertyUnit, Tenant, MaintenancePriority, MaintenanceCategory } from '@/types'
 import { cn } from '@/lib/utils'
-
-// ── Maintenance category / issue catalogue ────────────────────────────────────
-
-interface MaintenanceIssue {
-  id: string
-  title: string
-  description: string
-  priority: string
-}
-
-interface MaintenanceCategory {
-  id: string
-  name: string
-  issues: MaintenanceIssue[]
-}
-
-const MAINTENANCE_CATEGORIES: MaintenanceCategory[] = [
-  {
-    id: 'plumbing',
-    name: 'Plumbing',
-    issues: [
-      { id: 'leaking_faucet',  title: 'Leaking faucet',                        description: 'The faucet is leaking or dripping.',                         priority: 'medium' },
-      { id: 'clogged_sink',    title: 'Clogged sink drain',                    description: 'Water is draining slowly or not draining at all.',            priority: 'medium' },
-      { id: 'toilet_running',  title: 'Toilet running continuously',           description: 'The toilet continues to run after flushing.',                 priority: 'medium' },
-      { id: 'water_heater',    title: 'Water heater not producing hot water',  description: 'Hot water is unavailable or inconsistent.',                   priority: 'high'   },
-      { id: 'pipe_leak',       title: 'Pipe leak',                             description: 'Water leaking from pipes under sink or in walls.',            priority: 'high'   },
-    ],
-  },
-  {
-    id: 'electrical',
-    name: 'Electrical',
-    issues: [
-      { id: 'light_fixture',      title: 'Light fixture not working',         description: 'The light fixture does not turn on.',                        priority: 'medium' },
-      { id: 'outlet_not_working', title: 'Electrical outlet not working',     description: 'The outlet does not supply power.',                          priority: 'medium' },
-      { id: 'breaker_tripping',   title: 'Circuit breaker keeps tripping',    description: 'The breaker trips repeatedly.',                              priority: 'high'   },
-      { id: 'smoke_detector',     title: 'Smoke detector chirping',           description: 'Smoke detector beeping or malfunctioning.',                  priority: 'high'   },
-    ],
-  },
-  {
-    id: 'hvac',
-    name: 'HVAC',
-    issues: [
-      { id: 'ac_not_cooling',    title: 'Air conditioner not cooling', description: 'AC system is running but not cooling the unit.',  priority: 'high'   },
-      { id: 'heater_not_working',title: 'Heater not working',          description: 'Heating system not producing heat.',              priority: 'high'   },
-      { id: 'thermostat_issue',  title: 'Thermostat malfunction',      description: 'Thermostat not responding or inaccurate.',        priority: 'medium' },
-    ],
-  },
-  {
-    id: 'appliances',
-    name: 'Appliances',
-    issues: [
-      { id: 'refrigerator', title: 'Refrigerator not cooling',  description: 'Refrigerator is running but not keeping food cold.', priority: 'high'   },
-      { id: 'dishwasher',   title: 'Dishwasher not draining',   description: 'Dishwasher is not draining water properly.',         priority: 'medium' },
-      { id: 'washer',       title: 'Washer not spinning',       description: 'Washing machine drum not spinning.',                 priority: 'medium' },
-      { id: 'dryer',        title: 'Dryer not heating',         description: 'Dryer runs but does not generate heat.',             priority: 'medium' },
-    ],
-  },
-  {
-    id: 'doors_windows',
-    name: 'Doors / Windows',
-    issues: [
-      { id: 'lock_issue',   title: 'Door lock not working',            description: 'Door lock does not engage properly.',           priority: 'high'   },
-      { id: 'window_stuck', title: 'Window not opening or closing',    description: 'Window is stuck or difficult to operate.',      priority: 'medium' },
-      { id: 'sliding_door', title: 'Sliding door off track',           description: 'Sliding door is misaligned or stuck.',          priority: 'medium' },
-    ],
-  },
-  {
-    id: 'interior',
-    name: 'Walls / Floors / Ceiling',
-    issues: [
-      { id: 'drywall_damage', title: 'Drywall damage',          description: 'Hole, dent, or damage in wall.',                          priority: 'low'  },
-      { id: 'ceiling_stain',  title: 'Water stain on ceiling',  description: 'Visible water damage or discoloration on ceiling.',       priority: 'high' },
-      { id: 'floor_damage',   title: 'Floor damage',            description: 'Cracked tile, loose boards, or damaged flooring.',        priority: 'medium' },
-    ],
-  },
-  {
-    id: 'pest_control',
-    name: 'Pest Control',
-    issues: [
-      { id: 'ants',        title: 'Ant infestation',      description: 'Ants observed in the apartment.',         priority: 'medium' },
-      { id: 'cockroaches', title: 'Cockroach sighting',   description: 'Cockroaches seen in the unit.',           priority: 'high'   },
-      { id: 'rodents',     title: 'Rodent sighting',      description: 'Mice or rats observed in the unit.',      priority: 'high'   },
-    ],
-  },
-  {
-    id: 'water_damage',
-    name: 'Water Damage / Leak',
-    issues: [
-      { id: 'ceiling_leak', title: 'Water leaking from ceiling', description: 'Active water leak from ceiling.',            priority: 'emergency' },
-      { id: 'wall_leak',    title: 'Water leaking from wall',    description: 'Water visible coming from wall.',             priority: 'emergency' },
-      { id: 'flooding',     title: 'Flooding in unit',           description: 'Standing water inside the apartment.',        priority: 'emergency' },
-    ],
-  },
-  {
-    id: 'safety',
-    name: 'Safety',
-    issues: [
-      { id: 'gas_smell',    title: 'Gas smell detected',   description: 'Possible gas leak detected.',                     priority: 'emergency' },
-      { id: 'broken_glass', title: 'Broken glass hazard',  description: 'Broken window or glass posing safety risk.',      priority: 'high'      },
-    ],
-  },
-  {
-    id: 'other',
-    name: 'Other',
-    issues: [
-      { id: 'general_request', title: 'General maintenance request', description: 'Maintenance issue not listed above.', priority: 'medium' },
-    ],
-  },
-]
-
-const PRIORITY_MAP: Record<string, MaintenancePriority> = {
-  low:       'LOW',
-  medium:    'MEDIUM',
-  high:      'HIGH',
-  emergency: 'EMERGENCY',
-}
-
-const DEFAULT_PLACEHOLDER = 'Describe the maintenance issue in detail…'
 
 // ── Priority toggle config ────────────────────────────────────────────────────
 
@@ -168,11 +50,14 @@ const PRIORITY_CONFIG: { value: MaintenancePriority; label: string; selectedClas
 interface FormState {
   propertyId: string
   unitId: string
+  tenantId: string
   priority: MaintenancePriority | ''
   problemDescription: string
 }
 
-const emptyForm: FormState = { propertyId: '', unitId: '', priority: '', problemDescription: '' }
+const emptyForm: FormState = { propertyId: '', unitId: '', tenantId: '', priority: '', problemDescription: '' }
+
+const DEFAULT_PLACEHOLDER = 'Describe the maintenance issue in detail…'
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -184,6 +69,7 @@ export default function NewMaintenanceTicketPage() {
 
   const [properties, setProperties] = useState<Property[]>([])
   const [tenants, setTenants] = useState<Tenant[]>([])
+  const [categories, setCategories] = useState<MaintenanceCategory[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -200,10 +86,15 @@ export default function NewMaintenanceTicketPage() {
 
   useEffect(() => {
     logEvent('PAGE_VIEW', 'maintenance_new')
-    Promise.all([propertiesApi.getAll(), tenantsApi.getAll()])
-      .then(([props, tens]) => {
+    Promise.all([
+      propertiesApi.getAll(),
+      tenantsApi.getAll(),
+      maintenanceCategoriesApi.getAll(),
+    ])
+      .then(([props, tens, cats]) => {
         setProperties(props)
         setTenants(tens)
+        setCategories(cats)
       })
       .catch(() => toast.error('Failed to load data'))
       .finally(() => setIsLoading(false))
@@ -217,13 +108,13 @@ export default function NewMaintenanceTicketPage() {
     setSelectedProperty(prop)
     setSelectedUnit(null)
     setInferredTenantDisplay('')
-    setForm((f) => ({ ...f, propertyId, unitId: '' }))
+    setForm((f) => ({ ...f, propertyId, unitId: '', tenantId: '' }))
   }
 
   async function handleUnitChange(unitId: string) {
     const unit = selectedProperty?.units.find((u) => u.id === unitId) ?? null
     setSelectedUnit(unit)
-    setForm((f) => ({ ...f, unitId }))
+    setForm((f) => ({ ...f, unitId, tenantId: '' }))
     setInferredTenantDisplay('')
 
     if (!unit) return
@@ -239,6 +130,7 @@ export default function NewMaintenanceTicketPage() {
       const active = history.find((r) => r.status === 'ACTIVE')
       if (active) {
         const tenant = tenants.find((t) => t.id === active.tenantId)
+        setForm((f) => ({ ...f, tenantId: active.tenantId }))
         setInferredTenantDisplay(
           tenant
             ? `${tenant.firstName} ${tenant.lastName}`
@@ -262,13 +154,13 @@ export default function NewMaintenanceTicketPage() {
   }
 
   function handleIssueChange(issueId: string) {
-    const category = MAINTENANCE_CATEGORIES.find((c) => c.id === selectedCategoryId)
+    const category = categories.find((c) => c.id === selectedCategoryId)
     const issue = category?.issues.find((i) => i.id === issueId)
     if (!issue) return
 
     setSelectedIssueId(issueId)
     setDescriptionPlaceholder(issue.description)
-    setForm((f) => ({ ...f, priority: PRIORITY_MAP[issue.priority] ?? '' }))
+    setForm((f) => ({ ...f, priority: issue.priority }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -282,6 +174,7 @@ export default function NewMaintenanceTicketPage() {
       const ticket = await maintenanceApi.create({
         propertyId: form.propertyId,
         unitId: form.unitId,
+        tenantId: form.tenantId,
         priority: form.priority,
         problemDescription: form.problemDescription,
       })
@@ -310,25 +203,13 @@ export default function NewMaintenanceTicketPage() {
     )
   }
 
-  const selectedCategory = MAINTENANCE_CATEGORIES.find((c) => c.id === selectedCategoryId)
-  const isFormValid = form.propertyId && form.unitId && form.priority && form.problemDescription.trim()
+  const selectedCategory = categories.find((c) => c.id === selectedCategoryId)
+  const isFormValid = form.propertyId && form.unitId && form.tenantId && form.priority && form.problemDescription.trim()
 
   // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
     <div>
-      <div className="mb-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-1.5 text-muted-foreground"
-          onClick={() => router.push('/maintenance')}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to maintenance
-        </Button>
-      </div>
-
       <PageHeader
         title="New Maintenance Ticket"
         description="Submit a maintenance request for a property unit"
@@ -419,12 +300,12 @@ export default function NewMaintenanceTicketPage() {
               {/* Category */}
               <div className="space-y-2">
                 <Label>Category <span className="text-destructive">*</span></Label>
-                <Select value={selectedCategoryId} onValueChange={handleCategoryChange} required>
+                <Select value={selectedCategoryId} onValueChange={handleCategoryChange} disabled={isLoading} required>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a category" />
+                    <SelectValue placeholder={isLoading ? 'Loading…' : 'Select a category'} />
                   </SelectTrigger>
                   <SelectContent>
-                    {MAINTENANCE_CATEGORIES.map((cat) => (
+                    {categories.map((cat) => (
                       <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
                     ))}
                   </SelectContent>

@@ -2,7 +2,7 @@
 import { useEffect, useState, useMemo, type ComponentType } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
-  ArrowLeft, BedDouble, Bath, Maximize2, Building2, MapPin, Calendar, ChevronRight,
+  BedDouble, Bath, Maximize2, Building2, MapPin, Calendar, ChevronRight,
   ChevronLeft, Home, UtensilsCrossed, LayoutTemplate,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -14,7 +14,7 @@ import { propertiesApi } from '@/lib/api/properties.api'
 import { occupancyApi } from '@/lib/api/occupancy.api'
 import { maintenanceApi } from '@/lib/api/maintenance.api'
 import { tenantsApi } from '@/lib/api/tenants.api'
-import { useSettingsStore } from '@/store'
+import { useSettingsStore, useBreadcrumbStore } from '@/store'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { toast } from 'sonner'
 import { format, isValid } from 'date-fns'
@@ -30,6 +30,7 @@ export default function UnitDetailPage() {
   const { id: propertyId, unitId } = useParams<{ id: string; unitId: string }>()
   const router = useRouter()
   const fallbackCurrency = useSettingsStore((s) => s.settings?.currency ?? 'USD')
+  const setLabel = useBreadcrumbStore((s) => s.setLabel)
 
   const [property, setProperty] = useState<Property | null>(null)
   const [unit, setUnit] = useState<PropertyUnit | null>(null)
@@ -42,15 +43,18 @@ export default function UnitDetailPage() {
   useEffect(() => {
     async function load() {
       try {
-        const [prop, history, maintenanceRecords] = await Promise.all([
+        const [prop, history, allPropertyMaintenance] = await Promise.all([
           propertiesApi.getById(propertyId),
           occupancyApi.getUnitHistory(unitId),
-          maintenanceApi.getByUnit(unitId).catch(() => [] as MaintenanceRecord[]),
+          maintenanceApi.getByProperty(propertyId).catch(() => [] as MaintenanceRecord[]),
         ])
+        const maintenanceRecords = allPropertyMaintenance.filter((r) => r.unitId === unitId)
 
         const foundUnit = prop.units?.find((u) => u.id === unitId) ?? null
         setProperty(prop)
         setUnit(foundUnit)
+        setLabel(propertyId, prop.name)
+        if (foundUnit) setLabel(unitId, `Unit ${foundUnit.unitNumber}`)
         setOccupancy(history)
         setMaintenance(maintenanceRecords)
 
@@ -99,20 +103,9 @@ export default function UnitDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Back navigation */}
-      <Button
-        variant="ghost"
-        size="sm"
-        className="gap-1.5 text-muted-foreground"
-        onClick={() => router.push(`/properties/${propertyId}`)}
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to {property.name}
-      </Button>
-
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-zinc-900">Unit {unit.unitNumber}</h1>
+        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Unit {unit.unitNumber}</h1>
         <p className="text-sm text-muted-foreground mt-0.5">{property.name}</p>
       </div>
 
@@ -430,11 +423,11 @@ function UnitGalleryCarousel({ unit }: { unit: PropertyUnit }) {
 
 function MaintenanceStatusBadge({ status }: { status: string }) {
   const variants: Record<string, string> = {
-    OPEN: 'bg-red-50 text-red-700 border-red-100',
-    IN_PROGRESS: 'bg-blue-50 text-blue-700 border-blue-100',
-    RESOLVED: 'bg-green-50 text-green-700 border-green-100',
+    OPEN: 'bg-sky-50 text-sky-700 border-sky-100',
+    ASSIGNED: 'bg-purple-50 text-purple-700 border-purple-100',
+    IN_PROGRESS: 'bg-amber-50 text-amber-700 border-amber-100',
     COMPLETED: 'bg-green-50 text-green-700 border-green-100',
-    CLOSED: 'bg-zinc-100 text-zinc-600 border-zinc-200',
+    CANCELLED: 'bg-zinc-100 text-zinc-600 border-zinc-200',
   }
   const cls = variants[status?.toUpperCase()] ?? 'bg-zinc-100 text-zinc-600 border-zinc-200'
   return (

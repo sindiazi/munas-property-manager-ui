@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Dark rounded square background -->
+  <rect width="100" height="100" rx="18" fill="#1c1c1c"/>
+
+  <!-- Logo mark scaled and centred in the 100×100 square.
+       Original mark spans x:16–84, y:2–166 (68 wide, 164 tall).
+       Scale 0.59 → 40.1 wide × 96.8 tall.
+       Translate so it is centred: tx=20.5, ty=1.6                 -->
+  <g transform="translate(20.5,1.6) scale(0.59)">
+    <!-- Key bit -->
+    <path fill="#f5c842" d="M43,4 L72,4 L72,20 L57,20 L57,30 L72,30 L72,47 L57,47 L57,62 L43,62 Z"/>
+    <!-- Ball -->
+    <circle fill="#f5c842" cx="50" cy="68" r="8"/>
+    <!-- Left arm -->
+    <path fill="none" stroke="#f5c842" stroke-width="11" stroke-linecap="butt"
+          d="M50,68 C22,90 16,120 34,148"/>
+    <!-- Right arm -->
+    <path fill="none" stroke="#f5c842" stroke-width="11" stroke-linecap="butt"
+          d="M50,68 C78,90 84,120 66,148"/>
+    <!-- Ring -->
+    <path fill="#f5c842" fill-rule="evenodd"
+          d="M34,148 A16,16 0 1 0 66,148 A16,16 0 1 0 34,148 Z
+             M43,148 A7,7  0 1 0 57,148 A7,7  0 1 0 43,148 Z"/>
+  </g>
+</svg>

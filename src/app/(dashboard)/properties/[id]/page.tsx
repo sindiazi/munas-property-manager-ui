@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState, useMemo, type ComponentType } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, BedDouble, Bath, Maximize2, MoreHorizontal, CalendarX, CalendarCheck, FileText, UserPlus, ChevronLeft, ChevronRight, Home, UtensilsCrossed, LayoutTemplate, SlidersHorizontal, X } from 'lucide-react'
+import { BedDouble, Bath, Maximize2, MoreHorizontal, CalendarX, CalendarCheck, FileText, UserPlus, ChevronLeft, ChevronRight, Home, UtensilsCrossed, LayoutTemplate, SlidersHorizontal, X } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/button'
@@ -21,7 +21,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { propertiesApi } from '@/lib/api/properties.api'
 import { occupancyApi } from '@/lib/api/occupancy.api'
-import { useAuthStore, useSettingsStore } from '@/store'
+import { useAuthStore, useSettingsStore, useBreadcrumbStore } from '@/store'
 import { useEventLogger } from '@/hooks/useEventLogger'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { toast } from 'sonner'
@@ -29,6 +29,17 @@ import type { Property, PropertyUnit, UnavailabilityRecord } from '@/types'
 import { format } from 'date-fns'
 
 const LEASE_PERIODS = ['6 months', '1 year', '2 years']
+
+// Session-scoped filter cache keyed by property ID.
+// Populated on every filter change; read on mount to restore state.
+// Cleared on page refresh (module re-initialises).
+interface FilterState {
+  filterStatus: string
+  filterBedrooms: string
+  filterBathrooms: string
+  sortBy: string
+}
+const filterCache = new Map<string, FilterState>()
 
 function generateId() {
   return Math.random().toString(36).slice(2, 10)
@@ -44,6 +55,8 @@ export default function PropertyDetailPage() {
   const router = useRouter()
   const logEvent = useEventLogger()
   const { user } = useAuthStore()
+
+  const setLabel = useBreadcrumbStore((s) => s.setLabel)
 
   const [property, setProperty] = useState<Property | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -64,7 +77,7 @@ export default function PropertyDetailPage() {
     logEvent('PAGE_VIEW', 'property_detail', { propertyId: id })
     propertiesApi
       .getById(id)
-      .then(setProperty)
+      .then((p) => { setProperty(p); setLabel(id, p.name) })
       .catch(() => toast.error('Failed to load property'))
       .finally(() => setIsLoading(false))
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -163,11 +176,17 @@ export default function PropertyDetailPage() {
   const currency = useSettingsStore((s) => s.settings?.currency ?? 'USD')
   const canManage = user?.role === 'ADMIN' || user?.role === 'PROPERTY_MANAGER'
 
-  // Filters & sort
-  const [filterStatus, setFilterStatus] = useState<string>('all')
-  const [filterBedrooms, setFilterBedrooms] = useState<string>('all')
-  const [filterBathrooms, setFilterBathrooms] = useState<string>('all')
-  const [sortBy, setSortBy] = useState<string>('default')
+  // Filters & sort — restored from session cache if available, otherwise default to AVAILABLE
+  const cached = filterCache.get(id)
+  const [filterStatus, setFilterStatus] = useState<string>(cached?.filterStatus ?? 'AVAILABLE')
+  const [filterBedrooms, setFilterBedrooms] = useState<string>(cached?.filterBedrooms ?? 'all')
+  const [filterBathrooms, setFilterBathrooms] = useState<string>(cached?.filterBathrooms ?? 'all')
+  const [sortBy, setSortBy] = useState<string>(cached?.sortBy ?? 'default')
+
+  // Persist filter state to session cache whenever it changes
+  useEffect(() => {
+    filterCache.set(id, { filterStatus, filterBedrooms, filterBathrooms, sortBy })
+  }, [id, filterStatus, filterBedrooms, filterBathrooms, sortBy])
 
   const bedroomOptions = useMemo(
     () => [...new Set((property?.units ?? []).map((u) => u.bedrooms))].sort((a, b) => a - b),
@@ -189,10 +208,10 @@ export default function PropertyDetailPage() {
     else if (sortBy === 'size_desc') result.sort((a, b) => (b.squareFootage ?? 0) - (a.squareFootage ?? 0))
     return result
   }, [property, filterStatus, filterBedrooms, filterBathrooms, sortBy])
-  const isFiltered = filterStatus !== 'all' || filterBedrooms !== 'all' || filterBathrooms !== 'all' || sortBy !== 'default'
+  const isFiltered = filterStatus !== 'AVAILABLE' || filterBedrooms !== 'all' || filterBathrooms !== 'all' || sortBy !== 'default'
 
   function resetFilters() {
-    setFilterStatus('all')
+    setFilterStatus('AVAILABLE')
     setFilterBedrooms('all')
     setFilterBathrooms('all')
     setSortBy('default')
@@ -229,18 +248,6 @@ export default function PropertyDetailPage() {
 
   return (
     <div>
-      <div className="mb-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-1.5 text-muted-foreground"
-          onClick={() => router.push('/properties')}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to properties
-        </Button>
-      </div>
-
       <PageHeader
         title={property.name}
         description={`${property.street}, ${property.city}, ${property.state} ${property.zipCode}`}
@@ -604,19 +611,19 @@ function UnitCard({ unit, propertyId, fallbackCurrency, canManage, onMarkUnavail
                     <span className="sr-only">Unit actions</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="w-max">
                   <DropdownMenuItem
                     onClick={() => router.push(`/properties/${propertyId}/units/${unit.id}`)}
                   >
                     <FileText className="h-4 w-4" />
-                    View Unit Details
+                    Unit Details
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     disabled={unit.status !== 'OCCUPIED' || isLoadingLease}
                     onClick={handleViewCurrentLease}
                   >
                     <FileText className="h-4 w-4" />
-                    {isLoadingLease ? 'Loading…' : 'View Current Lease Details'}
+                    {isLoadingLease ? 'Loading…' : 'Current Lease'}
                   </DropdownMenuItem>
 
                   {/* Availability actions */}

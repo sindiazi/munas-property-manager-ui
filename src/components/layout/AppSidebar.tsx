@@ -3,9 +3,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuthStore } from '@/store'
 import {
-  Building2, LayoutDashboard, Home, Users, FileText,
+  LayoutDashboard, Home, Users, FileText,
   CreditCard, Wrench, Settings, UserCog, LogOut,
 } from 'lucide-react'
+import { Logo } from '@/components/layout/Logo'
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup,
   SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton,
@@ -40,11 +41,9 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b border-sidebar-border px-4 py-4">
+      <SidebarHeader className="border-b border-sidebar-border px-4 h-14 flex items-center">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 shrink-0">
-            <Building2 className="h-5 w-5 text-white" />
-          </div>
+          <Logo className="h-8 w-auto shrink-0" />
           <span className="font-semibold truncate group-data-[collapsible=icon]:hidden">
             Property Manager
           </span>

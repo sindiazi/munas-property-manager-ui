@@ -24,7 +24,7 @@ import { useEventLogger } from '@/hooks/useEventLogger'
 import { toast } from 'sonner'
 import type { MaintenanceRecord, Property, PropertyUnit, Tenant } from '@/types'
 
-type FilterStatus = 'ALL' | 'OPEN' | 'IN_PROGRESS' | 'CLOSED'
+type FilterStatus = 'ALL' | 'OPEN' | 'ASSIGNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'
 type SortKey = 'requestedAt_desc' | 'requestedAt_asc' | 'completedAt_desc' | 'completedAt_asc'
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
@@ -51,7 +51,7 @@ export default function MaintenancePage() {
   const [tenantMap, setTenantMap] = useState<Map<string, Tenant>>(new Map())
   const [isLoading, setIsLoading] = useState(true)
 
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>('OPEN')
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('ALL')
   const [searchTenant, setSearchTenant] = useState('')
   const [searchUnit, setSearchUnit] = useState('')
   const [sortBy, setSortBy] = useState<SortKey>('requestedAt_desc')
@@ -64,15 +64,14 @@ export default function MaintenancePage() {
       setIsLoading(false)
       return
     }
-    Promise.all([
-      maintenanceApi.getAll(),
-      propertiesApi.getAll(),
-      tenantsApi.getAll(),
-    ])
-      .then(([ticketsData, propsData, tenantsData]) => {
-        setTickets(ticketsData)
+    Promise.all([propertiesApi.getAll(), tenantsApi.getAll()])
+      .then(async ([propsData, tenantsData]) => {
         setProperties(propsData)
         setTenantMap(new Map(tenantsData.map((t) => [t.id, t])))
+        const arrays = await Promise.all(
+          propsData.map((p) => maintenanceApi.getByProperty(p.id).catch(() => [] as MaintenanceRecord[]))
+        )
+        setTickets(arrays.flat())
       })
       .catch(() => toast.error('Failed to load maintenance data'))
       .finally(() => setIsLoading(false))
@@ -134,19 +133,19 @@ export default function MaintenancePage() {
     return result
   }, [tickets, filterStatus, searchTenant, searchUnit, sortBy, tenantMap, unitMap])
 
-  const isFiltered = filterStatus !== 'OPEN' || searchTenant !== '' || searchUnit !== '' || sortBy !== 'requestedAt_desc'
+  const isFiltered = filterStatus !== 'ALL' || searchTenant !== '' || searchUnit !== '' || sortBy !== 'requestedAt_desc'
 
   function resetFilters() {
-    setFilterStatus('OPEN')
+    setFilterStatus('ALL')
     setSearchTenant('')
     setSearchUnit('')
     setSortBy('requestedAt_desc')
   }
 
   const total      = tickets.length
-  const open       = tickets.filter((t) => t.status === 'OPEN').length
+  const open       = tickets.filter((t) => t.status === 'OPEN' || t.status === 'ASSIGNED').length
   const inProgress = tickets.filter((t) => t.status === 'IN_PROGRESS').length
-  const closed     = tickets.filter((t) => t.status === 'CLOSED').length
+  const closed     = tickets.filter((t) => t.status === 'COMPLETED' || t.status === 'CANCELLED').length
   const colCount   = 7
 
   if (!canManage) {
@@ -203,8 +202,10 @@ export default function MaintenancePage() {
           <SelectContent>
             <SelectItem value="ALL">All statuses</SelectItem>
             <SelectItem value="OPEN">Open</SelectItem>
+            <SelectItem value="ASSIGNED">Assigned</SelectItem>
             <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-            <SelectItem value="CLOSED">Closed</SelectItem>
+            <SelectItem value="COMPLETED">Completed</SelectItem>
+            <SelectItem value="CANCELLED">Cancelled</SelectItem>
           </SelectContent>
         </Select>
 

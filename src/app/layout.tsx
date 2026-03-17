@@ -9,6 +9,7 @@ const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin']
 export const metadata: Metadata = {
   title: 'Property Manager',
   description: 'Munas Property Management Platform',
+  icons: { icon: '/logo.svg' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

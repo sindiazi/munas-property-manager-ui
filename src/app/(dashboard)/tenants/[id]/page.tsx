@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
-  ArrowLeft, User, Mail, Phone, CreditCard, ShieldCheck, ShieldOff,
+  User, Mail, Phone, CreditCard, ShieldCheck, ShieldOff,
   Calendar, ChevronRight, Wrench,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -23,7 +23,7 @@ import type { UpdateTenantCommand } from '@/lib/api/tenants.api'
 import { leasesApi } from '@/lib/api/leases.api'
 import { maintenanceApi } from '@/lib/api/maintenance.api'
 import { propertiesApi } from '@/lib/api/properties.api'
-import { useAuthStore, useSettingsStore } from '@/store'
+import { useAuthStore, useSettingsStore, useBreadcrumbStore } from '@/store'
 import { useEventLogger } from '@/hooks/useEventLogger'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { toast } from 'sonner'
@@ -52,21 +52,6 @@ function maskId(value?: string | null) {
   return `***${value.slice(-4)}`
 }
 
-function MaintenanceStatusBadge({ status }: { status: string }) {
-  const variants: Record<string, string> = {
-    OPEN: 'bg-red-50 text-red-700 border-red-100',
-    IN_PROGRESS: 'bg-blue-50 text-blue-700 border-blue-100',
-    RESOLVED: 'bg-green-50 text-green-700 border-green-100',
-    COMPLETED: 'bg-green-50 text-green-700 border-green-100',
-    CLOSED: 'bg-zinc-100 text-zinc-600 border-zinc-200',
-  }
-  const cls = variants[status?.toUpperCase()] ?? 'bg-zinc-100 text-zinc-600 border-zinc-200'
-  return (
-    <span className={`inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium ${cls}`}>
-      {status ?? '—'}
-    </span>
-  )
-}
 
 export default function TenantDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -74,6 +59,7 @@ export default function TenantDetailPage() {
   const logEvent = useEventLogger()
   const { user } = useAuthStore()
   const currency = useSettingsStore((s) => s.settings?.currency ?? 'USD')
+  const setLabel = useBreadcrumbStore((s) => s.setLabel)
 
   const [tenant, setTenant] = useState<Tenant | null>(null)
   const [leases, setLeases] = useState<Lease[]>([])
@@ -107,6 +93,7 @@ export default function TenantDetailPage() {
           propertiesApi.getAll().catch(() => [] as Property[]),
         ])
         setTenant(t)
+        setLabel(id, `${t.firstName} ${t.lastName}`)
         setEditForm({
           firstName: t.firstName,
           lastName: t.lastName,
@@ -194,17 +181,6 @@ export default function TenantDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Back */}
-      <Button
-        variant="ghost"
-        size="sm"
-        className="gap-1.5 text-muted-foreground"
-        onClick={() => router.push('/tenants')}
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to tenants
-      </Button>
-
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -329,8 +305,7 @@ export default function TenantDetailPage() {
               <table className="w-full text-sm">
                 <thead className="bg-muted/50">
                   <tr className="border-b text-xs text-muted-foreground uppercase tracking-wide">
-                    <th className="px-4 py-3 text-left font-medium">Property</th>
-                    <th className="px-4 py-3 text-left font-medium">Unit</th>
+                    <th className="px-4 py-3 text-left font-medium">Property / Unit</th>
                     <th className="px-4 py-3 text-left font-medium">Period</th>
                     <th className="px-4 py-3 text-left font-medium">Rent</th>
                     <th className="px-4 py-3 text-left font-medium">Status</th>
@@ -347,11 +322,13 @@ export default function TenantDetailPage() {
                         className="border-b last:border-0 hover:bg-muted/40 cursor-pointer transition-colors"
                         onClick={() => router.push(`/leasing/${lease.id}`)}
                       >
-                        <td className="px-4 py-3 font-medium">
-                          {property?.name ?? <span className="text-muted-foreground">{lease.propertyId.slice(0, 8)}…</span>}
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {unit ? `Unit ${unit.unitNumber}` : '—'}
+                        <td className="px-4 py-3">
+                          <span className="font-medium">
+                            {property?.name ?? <span className="text-muted-foreground">{lease.propertyId.slice(0, 8)}…</span>}
+                          </span>
+                          {unit && (
+                            <p className="text-xs text-muted-foreground mt-0.5">Unit {unit.unitNumber}</p>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-muted-foreground">
                           {safeFormat(lease.startDate, 'MMM d, yyyy')}
@@ -408,11 +385,16 @@ export default function TenantDetailPage() {
                     <th className="px-4 py-3 text-left font-medium">Status</th>
                     <th className="px-4 py-3 text-left font-medium">Priority</th>
                     <th className="px-4 py-3 text-left font-medium">Date</th>
+                    <th className="px-4 py-3 text-right font-medium" />
                   </tr>
                 </thead>
                 <tbody>
                   {pagedMaintenance.map((r) => (
-                    <tr key={r.id} className="border-b last:border-0">
+                    <tr
+                      key={r.id}
+                      className="border-b last:border-0 hover:bg-muted/40 cursor-pointer transition-colors"
+                      onClick={() => router.push(`/maintenance/${r.id}`)}
+                    >
                       <td className="px-4 py-2.5 font-medium">
                         {r.problemDescription}
                         {r.resolutionNotes && (
@@ -422,7 +404,7 @@ export default function TenantDetailPage() {
                         )}
                       </td>
                       <td className="px-4 py-2.5">
-                        <MaintenanceStatusBadge status={r.status} />
+                        <StatusBadge status={r.status} />
                       </td>
                       <td className="px-4 py-2.5 text-muted-foreground capitalize text-xs">
                         {r.priority?.toLowerCase() ?? '—'}
@@ -437,6 +419,9 @@ export default function TenantDetailPage() {
                             Completed {safeFormat(r.completedAt, 'MMM d, yyyy')}
                           </p>
                         )}
+                      </td>
+                      <td className="px-4 py-2.5 text-right">
+                        <ChevronRight className="h-4 w-4 text-muted-foreground inline" />
                       </td>
                     </tr>
                   ))}
