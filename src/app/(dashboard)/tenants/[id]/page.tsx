@@ -52,21 +52,6 @@ function maskId(value?: string | null) {
   return `***${value.slice(-4)}`
 }
 
-function MaintenanceStatusBadge({ status }: { status: string }) {
-  const variants: Record<string, string> = {
-    OPEN: 'bg-sky-50 text-sky-700 border-sky-100',
-    ASSIGNED: 'bg-purple-50 text-purple-700 border-purple-100',
-    IN_PROGRESS: 'bg-amber-50 text-amber-700 border-amber-100',
-    COMPLETED: 'bg-green-50 text-green-700 border-green-100',
-    CANCELLED: 'bg-zinc-100 text-zinc-600 border-zinc-200',
-  }
-  const cls = variants[status?.toUpperCase()] ?? 'bg-zinc-100 text-zinc-600 border-zinc-200'
-  return (
-    <span className={`inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium ${cls}`}>
-      {status ?? '—'}
-    </span>
-  )
-}
 
 export default function TenantDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -320,8 +305,7 @@ export default function TenantDetailPage() {
               <table className="w-full text-sm">
                 <thead className="bg-muted/50">
                   <tr className="border-b text-xs text-muted-foreground uppercase tracking-wide">
-                    <th className="px-4 py-3 text-left font-medium">Property</th>
-                    <th className="px-4 py-3 text-left font-medium">Unit</th>
+                    <th className="px-4 py-3 text-left font-medium">Property / Unit</th>
                     <th className="px-4 py-3 text-left font-medium">Period</th>
                     <th className="px-4 py-3 text-left font-medium">Rent</th>
                     <th className="px-4 py-3 text-left font-medium">Status</th>
@@ -338,11 +322,13 @@ export default function TenantDetailPage() {
                         className="border-b last:border-0 hover:bg-muted/40 cursor-pointer transition-colors"
                         onClick={() => router.push(`/leasing/${lease.id}`)}
                       >
-                        <td className="px-4 py-3 font-medium">
-                          {property?.name ?? <span className="text-muted-foreground">{lease.propertyId.slice(0, 8)}…</span>}
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {unit ? `Unit ${unit.unitNumber}` : '—'}
+                        <td className="px-4 py-3">
+                          <span className="font-medium">
+                            {property?.name ?? <span className="text-muted-foreground">{lease.propertyId.slice(0, 8)}…</span>}
+                          </span>
+                          {unit && (
+                            <p className="text-xs text-muted-foreground mt-0.5">Unit {unit.unitNumber}</p>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-muted-foreground">
                           {safeFormat(lease.startDate, 'MMM d, yyyy')}
@@ -418,7 +404,7 @@ export default function TenantDetailPage() {
                         )}
                       </td>
                       <td className="px-4 py-2.5">
-                        <MaintenanceStatusBadge status={r.status} />
+                        <StatusBadge status={r.status} />
                       </td>
                       <td className="px-4 py-2.5 text-muted-foreground capitalize text-xs">
                         {r.priority?.toLowerCase() ?? '—'}
