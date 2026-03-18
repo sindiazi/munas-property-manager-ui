@@ -1,5 +1,5 @@
 import apiClient from './client'
-import type { Payment, PaymentType } from '@/types'
+import type { Payment, PaymentType, InitiateMpesaPaymentCommand, MpesaInitiationResponse, MpesaStatusResponse } from '@/types'
 
 export interface CreatePaymentCommand {
   leaseId: string
@@ -40,6 +40,14 @@ export const paymentsApi = {
   },
   receive: async (id: string, command: ProcessPaymentCommand): Promise<Payment> => {
     const { data } = await apiClient.patch<Payment>(`/api/v1/payments/${id}/receive`, { ...command, id })
+    return data
+  },
+  initiateMpesa: async (command: InitiateMpesaPaymentCommand): Promise<MpesaInitiationResponse> => {
+    const { data } = await apiClient.post<MpesaInitiationResponse>('/api/v1/payments/mpesa', command)
+    return data
+  },
+  getMpesaStatus: async (paymentId: string): Promise<MpesaStatusResponse> => {
+    const { data } = await apiClient.get<MpesaStatusResponse>(`/api/v1/payments/${paymentId}/mpesa/status`)
     return data
   },
 }

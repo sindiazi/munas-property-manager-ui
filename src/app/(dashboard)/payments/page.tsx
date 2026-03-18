@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useMemo } from 'react'
-import { CreditCard, ArrowUpDown, X, CircleDollarSign, SlidersHorizontal } from 'lucide-react'
+import { CreditCard, ArrowUpDown, X, CircleDollarSign, SlidersHorizontal, Smartphone } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { TableLoadingState } from '@/components/shared/LoadingState'
@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/select'
 import { paymentsApi } from '@/lib/api/payments.api'
 import type { CreatePaymentCommand, ProcessPaymentCommand } from '@/lib/api/payments.api'
+import { MpesaPaymentDialog } from '@/components/payments/MpesaPaymentDialog'
 import { leasesApi } from '@/lib/api/leases.api'
 import { tenantsApi } from '@/lib/api/tenants.api'
 import { propertiesApi } from '@/lib/api/properties.api'
@@ -78,6 +79,7 @@ export default function PaymentsPage() {
 
   const [showCreate, setShowCreate] = useState(false)
   const [receiveId, setReceiveId] = useState<string | null>(null)
+  const [mpesaPayment, setMpesaPayment] = useState<Payment | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [createForm, setCreateForm] = useState<CreatePaymentCommand>(() => makeEmptyCreateForm(currency))
   const [receiveForm, setReceiveForm] = useState<ProcessPaymentCommand>({
@@ -193,13 +195,6 @@ export default function PaymentsPage() {
       <PageHeader
         title="Payments"
         description={`${payments.filter((p) => p.status === 'OVERDUE').length} overdue · ${formatCurrency(totalOutstanding, currency)} outstanding`}
-        action={
-          canManage ? (
-            <Button onClick={() => setShowCreate(true)}>
-              <CircleDollarSign className="h-4 w-4 mr-2" /> Accept Payment
-            </Button>
-          ) : undefined
-        }
       />
 
       {/* Filters */}
@@ -343,29 +338,47 @@ export default function PaymentsPage() {
                       </TableCell>
                       {canManage && (
                         <TableCell>
-                          {(payment.status === 'PENDING' || payment.status === 'OVERDUE') && (
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => {
-                                      setReceiveId(payment.id)
-                                      setReceiveForm({
-                                        amountPaid: payment.amountDue,
-                                        currencyCode: payment.currencyCode,
-                                        paymentDate: new Date().toISOString().split('T')[0],
-                                      })
-                                    }}
-                                  >
-                                    <CircleDollarSign className="h-4 w-4" />
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>Record payment</TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          )}
+                          <div className="flex items-center gap-1">
+                            {(payment.status === 'PENDING' || payment.status === 'OVERDUE') && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => {
+                                        setReceiveId(payment.id)
+                                        setReceiveForm({
+                                          amountPaid: payment.amountDue,
+                                          currencyCode: payment.currencyCode,
+                                          paymentDate: new Date().toISOString().split('T')[0],
+                                        })
+                                      }}
+                                    >
+                                      <CircleDollarSign className="h-4 w-4" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Record payment</TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                            {(payment.status === 'PENDING' || payment.status === 'PARTIALLY_PAID') && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => setMpesaPayment(payment)}
+                                    >
+                                      <Smartphone className="h-4 w-4" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Pay with M-Pesa</TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
                         </TableCell>
                       )}
                     </TableRow>
@@ -478,6 +491,20 @@ export default function PaymentsPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* M-Pesa Payment Dialog */}
+      {mpesaPayment && (
+        <MpesaPaymentDialog
+          open={mpesaPayment !== null}
+          onOpenChange={(open) => { if (!open) setMpesaPayment(null) }}
+          payment={mpesaPayment}
+          tenantPhone={tenantMap.get(mpesaPayment.tenantId)?.phoneNumber ?? ''}
+          onSuccess={(updated) => {
+            setPayments((prev) => [updated, ...prev])
+            setMpesaPayment(null)
+          }}
+        />
+      )}
 
       {/* Record Receipt Dialog */}
       <Dialog open={!!receiveId} onOpenChange={() => setReceiveId(null)}>

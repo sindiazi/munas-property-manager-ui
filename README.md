@@ -9,7 +9,7 @@ A modern, full-featured property management web application built with Next.js. 
 - **Properties** — Create and manage properties with multiple rental units. Track availability, mark units unavailable, view unit details and occupancy history.
 - **Tenants** — Register tenants, view contact details, manage activation status, and track national ID and credit score.
 - **Leasing** — Create and manage lease agreements. Filter by status, property, and duration. Sort by start/end date. Deep-link from a unit card to pre-populate a new lease.
-- **Payments** — Track rent, deposits, fees, and other payment types. Filter by status and property. Sort by due or paid date. Record incoming payments.
+- **Payments** — Track rent, deposits, fees, and other payment types. Filter by status and property. Sort by due or paid date. Record incoming payments or initiate M-Pesa STK Push payments with real-time polling for confirmation.
 - **Maintenance** — View and manage maintenance requests per tenant and unit.
 - **Users** — Manage application users and roles (Admin only).
 - **Settings** — Configure display currency, theme (light/dark), and timezone per user.
@@ -111,6 +111,7 @@ src/
 │       └── settings/page.tsx
 ├── components/
 │   ├── layout/                           # AppSidebar, Header
+│   ├── payments/                         # MpesaPaymentDialog
 │   ├── shared/                           # PageHeader, StatusBadge, StatCard, LoadingState
 │   └── ui/                              # shadcn/ui components
 ├── hooks/
@@ -169,7 +170,7 @@ The Axios client (`src/lib/api/client.ts`) automatically:
 | Units | `/api/v1/units` |
 | Tenants | `/api/v1/tenants` |
 | Leases | `/api/v1/leases` |
-| Payments | `/api/v1/payments` |
+| Payments | `/api/v1/payments`, `/api/v1/payments/mpesa`, `/api/v1/payments/{id}/mpesa/status` |
 | Maintenance | `/api/v1/maintenance` |
 | Occupancy | `/api/v1/occupancy` |
 | Settings | `/api/v1/settings` |

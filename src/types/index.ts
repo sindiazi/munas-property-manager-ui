@@ -145,6 +145,35 @@ export interface MaintenanceRecord {
   completedAt?: string
 }
 
+export interface InitiateMpesaPaymentCommand {
+  leaseId: string
+  tenantId: string
+  amount: number
+  phoneNumber: string
+  dueDate: string
+  type: PaymentType
+}
+
+export interface MpesaInitiationResponse {
+  paymentId: string
+  checkoutRequestId: string
+  merchantRequestId: string
+  customerMessage: string
+  paymentStatus: PaymentStatus
+}
+
+export type MpesaTransactionStatus = 'INITIATED' | 'CONFIRMED' | 'FAILED' | 'CANCELLED'
+
+export interface MpesaStatusResponse {
+  paymentId: string
+  checkoutRequestId: string
+  transactionStatus: MpesaTransactionStatus
+  resultDescription: string
+  mpesaReceiptNumber: string | null
+  amountPaid: number | null
+  paymentStatus: PaymentStatus
+}
+
 export interface AppEvent {
   id: string
   type: EventType
