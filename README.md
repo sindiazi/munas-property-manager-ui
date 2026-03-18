@@ -9,18 +9,18 @@ A modern, full-featured property management web application built with Next.js. 
 - **Properties** — Create and manage properties with multiple rental units. Track availability, mark units unavailable, view unit details and occupancy history.
 - **Tenants** — Register tenants, view contact details, manage activation status, and track national ID and credit score.
 - **Leasing** — Create and manage lease agreements. Filter by status, property, and duration. Sort by start/end date. Deep-link from a unit card to pre-populate a new lease.
-- **Payments** — Track rent, deposits, fees, and other payment types. Filter by status and property. Sort by due or paid date. Record incoming payments or initiate M-Pesa STK Push payments with real-time polling for confirmation.
+- **Invoices** — Track rent, deposits, fees, and other invoice types. Filter by status and property. Sort by due or paid date. Record cash payments, initiate M-Pesa STK Push payments with real-time polling, or pay by card (coming soon). Expand any invoice row to view its full payment transaction history.
 - **Maintenance** — View and manage maintenance requests per tenant and unit.
 - **Users** — Manage application users and roles (Admin only).
 - **Settings** — Configure display currency, theme (light/dark), and timezone per user.
-- **Dashboard** — Overview of key stats, recent leases, and recent payments with clickable rows.
+- **Dashboard** — Overview of key stats, recent leases, and recent invoices with clickable rows.
 
 ### Role-Based Access
 
 | Role | Capabilities |
 |------|-------------|
 | `ADMIN` | Full access — manage users, all CRUD operations |
-| `PROPERTY_MANAGER` | Create and manage properties, tenants, leases, payments |
+| `PROPERTY_MANAGER` | Create and manage properties, tenants, leases, invoices |
 | `READ_ONLY` | View-only access across all sections |
 
 ---
@@ -105,13 +105,13 @@ src/
 │       ├── leasing/
 │       │   ├── page.tsx                  # Leases list with filters
 │       │   └── [id]/page.tsx             # Lease detail
-│       ├── payments/page.tsx             # Payments list with filters
+│       ├── invoices/page.tsx             # Invoices list with filters and payment history
 │       ├── maintenance/page.tsx
 │       ├── users/page.tsx                # Admin only
 │       └── settings/page.tsx
 ├── components/
 │   ├── layout/                           # AppSidebar, Header
-│   ├── payments/                         # MpesaPaymentDialog
+│   ├── billing/                          # MpesaInvoiceDialog
 │   ├── shared/                           # PageHeader, StatusBadge, StatCard, LoadingState
 │   └── ui/                              # shadcn/ui components
 ├── hooks/
@@ -123,7 +123,7 @@ src/
 │   │   ├── properties.api.ts
 │   │   ├── tenants.api.ts
 │   │   ├── leases.api.ts
-│   │   ├── payments.api.ts
+│   │   ├── invoices.api.ts
 │   │   ├── maintenance.api.ts
 │   │   ├── occupancy.api.ts
 │   │   ├── settings.api.ts
@@ -170,7 +170,7 @@ The Axios client (`src/lib/api/client.ts`) automatically:
 | Units | `/api/v1/units` |
 | Tenants | `/api/v1/tenants` |
 | Leases | `/api/v1/leases` |
-| Payments | `/api/v1/payments`, `/api/v1/payments/mpesa`, `/api/v1/payments/{id}/mpesa/status` |
+| Invoices | `/api/v1/invoices`, `/api/v1/invoices/{id}/payments/cash`, `/api/v1/invoices/{id}/payments/mpesa`, `/api/v1/invoices/payments/mpesa/{txId}/status` |
 | Maintenance | `/api/v1/maintenance` |
 | Occupancy | `/api/v1/occupancy` |
 | Settings | `/api/v1/settings` |
@@ -195,12 +195,14 @@ Three Zustand stores:
 Defined in `src/types/index.ts`:
 
 ```ts
-UserRole      = 'ADMIN' | 'PROPERTY_MANAGER' | 'READ_ONLY'
-TenantStatus  = 'ACTIVE' | 'INACTIVE' | 'PENDING'
-LeaseStatus   = 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED'
-PaymentStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'PARTIALLY_PAID' | 'CANCELLED'
-PaymentType   = 'RENT' | 'SECURITY_DEPOSIT' | 'LATE_FEE' | 'MAINTENANCE_FEE' | 'OTHER'
-PropertyType  = 'APARTMENT' | 'HOUSE' | 'COMMERCIAL' | 'CONDO' | 'TOWNHOUSE' | 'STUDIO'
+UserRole               = 'ADMIN' | 'PROPERTY_MANAGER' | 'READ_ONLY'
+TenantStatus           = 'ACTIVE' | 'INACTIVE' | 'PENDING'
+LeaseStatus            = 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED'
+InvoiceStatus          = 'PENDING' | 'PAID' | 'OVERDUE' | 'PARTIALLY_PAID' | 'CANCELLED'
+InvoiceType            = 'RENT' | 'SECURITY_DEPOSIT' | 'LATE_FEE' | 'MAINTENANCE_FEE' | 'OTHER'
+PaymentMethod          = 'CASH' | 'MPESA' | 'CARD'
+PaymentTransactionStatus = 'COMPLETED' | 'FAILED'
+PropertyType           = 'APARTMENT' | 'HOUSE' | 'COMMERCIAL' | 'CONDO' | 'TOWNHOUSE' | 'STUDIO'
 ```
 
 ---

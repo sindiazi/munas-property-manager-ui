@@ -1,8 +1,10 @@
 export type UserRole = 'ADMIN' | 'PROPERTY_MANAGER' | 'READ_ONLY'
 export type Theme = 'LIGHT' | 'DARK'
 export type LeaseStatus = 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED'
-export type PaymentStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'PARTIALLY_PAID' | 'CANCELLED'
-export type PaymentType = 'RENT' | 'SECURITY_DEPOSIT' | 'LATE_FEE' | 'MAINTENANCE_FEE' | 'OTHER'
+export type InvoiceStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'PARTIALLY_PAID' | 'CANCELLED'
+export type InvoiceType = 'RENT' | 'SECURITY_DEPOSIT' | 'LATE_FEE' | 'MAINTENANCE_FEE' | 'OTHER'
+export type PaymentMethod = 'CASH' | 'MPESA' | 'CARD'
+export type PaymentTransactionStatus = 'COMPLETED' | 'FAILED'
 export type PropertyType = 'APARTMENT' | 'HOUSE' | 'COMMERCIAL' | 'CONDO' | 'TOWNHOUSE' | 'STUDIO'
 export type TenantStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING'
 export type EventType = 'PAGE_VIEW' | 'USER_ACTION' | 'API_CALL' | 'API_ERROR' | 'AUTH' | 'NAVIGATION'
@@ -93,8 +95,8 @@ export interface Lease {
   createdAt: string
 }
 
-export interface Payment {
-  id: string
+export interface Invoice {
+  invoiceId: string
   leaseId: string
   tenantId: string
   amountDue: number
@@ -103,8 +105,21 @@ export interface Payment {
   currencyCode: string
   dueDate: string
   paidDate?: string
-  status: PaymentStatus
-  type: PaymentType
+  status: InvoiceStatus
+  type: InvoiceType
+  createdAt: string
+}
+
+export interface PaymentTransaction {
+  id: string
+  invoiceId: string
+  tenantId: string
+  amount: number
+  currencyCode: string
+  method: PaymentMethod
+  status: PaymentTransactionStatus
+  reference: string | null
+  paymentDate: string
   createdAt: string
 }
 
@@ -146,32 +161,30 @@ export interface MaintenanceRecord {
 }
 
 export interface InitiateMpesaPaymentCommand {
-  leaseId: string
-  tenantId: string
+  invoiceId: string
   amount: number
   phoneNumber: string
-  dueDate: string
-  type: PaymentType
 }
 
 export interface MpesaInitiationResponse {
-  paymentId: string
+  invoiceId: string
+  paymentTransactionId: string
   checkoutRequestId: string
   merchantRequestId: string
   customerMessage: string
-  paymentStatus: PaymentStatus
+  invoiceStatus: InvoiceStatus
 }
 
 export type MpesaTransactionStatus = 'INITIATED' | 'CONFIRMED' | 'FAILED' | 'CANCELLED'
 
 export interface MpesaStatusResponse {
-  paymentId: string
+  invoiceId: string
   checkoutRequestId: string
   transactionStatus: MpesaTransactionStatus
   resultDescription: string
   mpesaReceiptNumber: string | null
   amountPaid: number | null
-  paymentStatus: PaymentStatus
+  invoiceStatus: InvoiceStatus
 }
 
 export interface AppEvent {

@@ -20,7 +20,7 @@ const navItems = [
   { label: 'Properties',  href: '/properties',  icon: Home,            managerOnly: false },
   { label: 'Tenants',     href: '/tenants',     icon: Users,           managerOnly: false },
   { label: 'Leasing',     href: '/leasing',     icon: FileText,        managerOnly: false },
-  { label: 'Payments',    href: '/payments',    icon: CreditCard,      managerOnly: false },
+  { label: 'Invoices',    href: '/invoices',    icon: CreditCard,      managerOnly: false },
   { label: 'Maintenance', href: '/maintenance', icon: Wrench,          managerOnly: true  },
 ]
 

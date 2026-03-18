@@ -7,50 +7,49 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { paymentsApi } from '@/lib/api/payments.api'
+import { invoicesApi } from '@/lib/api/invoices.api'
 import { useSettingsStore } from '@/store'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { toast } from 'sonner'
-import type { Payment } from '@/types'
+import type { Invoice } from '@/types'
 
 const MAX_POLLS = 20
 const POLL_INTERVAL_MS = 3000
 
-interface MpesaPaymentDialogProps {
+interface MpesaInvoiceDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  payment: Payment
+  invoice: Invoice
   tenantPhone: string
-  onSuccess: (updated: Payment) => void
+  onSuccess: (updated: Invoice) => void
 }
 
-export function MpesaPaymentDialog({
+export function MpesaInvoiceDialog({
   open,
   onOpenChange,
-  payment,
+  invoice,
   tenantPhone,
   onSuccess,
-}: MpesaPaymentDialogProps) {
+}: MpesaInvoiceDialogProps) {
   const currency = useSettingsStore((s) => s.settings?.currency ?? 'KES')
 
   const [phase, setPhase] = useState<'input' | 'polling'>('input')
   const [phone, setPhone] = useState(tenantPhone)
-  const [amount, setAmount] = useState<number>(payment.outstandingBalance ?? payment.amountDue)
+  const [amount, setAmount] = useState<number>(invoice.outstandingBalance ?? invoice.amountDue)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const pollCountRef = useRef(0)
-  const pendingPaymentIdRef = useRef<string | null>(null)
+  const pendingTransactionIdRef = useRef<string | null>(null)
 
-  // Reset form state when dialog opens or payment changes
   useEffect(() => {
     if (open) {
       setPhase('input')
       setPhone(tenantPhone)
-      setAmount(payment.outstandingBalance ?? payment.amountDue)
+      setAmount(invoice.outstandingBalance ?? invoice.amountDue)
       setIsSubmitting(false)
     }
-  }, [open, tenantPhone, payment])
+  }, [open, tenantPhone, invoice])
 
   function stopPolling() {
     if (intervalRef.current) {
@@ -59,25 +58,24 @@ export function MpesaPaymentDialog({
     }
   }
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => stopPolling()
   }, [])
 
-  function startPolling(paymentId: string) {
+  function startPolling(paymentTransactionId: string) {
     pollCountRef.current = 0
-    pendingPaymentIdRef.current = paymentId
+    pendingTransactionIdRef.current = paymentTransactionId
 
     intervalRef.current = setInterval(async () => {
       pollCountRef.current += 1
 
       try {
-        const status = await paymentsApi.getMpesaStatus(paymentId)
+        const status = await invoicesApi.getMpesaStatus(paymentTransactionId)
 
         if (status.transactionStatus === 'CONFIRMED') {
           stopPolling()
           try {
-            const refreshed = await paymentsApi.getById(paymentId)
+            const refreshed = await invoicesApi.getById(invoice.invoiceId)
             onSuccess(refreshed)
           } catch {
             // Still close and notify even if refresh fails
@@ -116,16 +114,12 @@ export function MpesaPaymentDialog({
     e.preventDefault()
     setIsSubmitting(true)
     try {
-      const response = await paymentsApi.initiateMpesa({
-        leaseId: payment.leaseId,
-        tenantId: payment.tenantId,
+      const response = await invoicesApi.initiateMpesa(invoice.invoiceId, {
         amount,
         phoneNumber: phone,
-        dueDate: payment.dueDate,
-        type: payment.type,
       })
       setPhase('polling')
-      startPolling(response.paymentId)
+      startPolling(response.paymentTransactionId)
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to initiate M-Pesa payment'
       toast.error(message)
@@ -171,7 +165,7 @@ export function MpesaPaymentDialog({
                 required
               />
               <p className="text-xs text-muted-foreground">
-                Partial payments are allowed. Outstanding: {formatCurrency(payment.outstandingBalance ?? payment.amountDue, currency)}
+                Partial payments are allowed. Outstanding: {formatCurrency(invoice.outstandingBalance ?? invoice.amountDue, currency)}
               </p>
             </div>
             <DialogFooter>

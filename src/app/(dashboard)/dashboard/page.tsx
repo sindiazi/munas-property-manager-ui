@@ -10,11 +10,11 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import { propertiesApi } from '@/lib/api/properties.api'
 import { tenantsApi } from '@/lib/api/tenants.api'
 import { leasesApi } from '@/lib/api/leases.api'
-import { paymentsApi } from '@/lib/api/payments.api'
+import { invoicesApi } from '@/lib/api/invoices.api'
 import { useEventLogger } from '@/hooks/useEventLogger'
 import { useSettingsStore } from '@/store'
 import { formatCurrency } from '@/lib/formatCurrency'
-import type { Property, Tenant, Lease, Payment } from '@/types'
+import type { Property, Tenant, Lease, Invoice } from '@/types'
 import { format, isValid } from 'date-fns'
 
 function safeFormat(dateStr: string | undefined | null, fmt: string) {
@@ -30,7 +30,7 @@ export default function DashboardPage() {
   const [properties, setProperties] = useState<Property[]>([])
   const [tenants, setTenants] = useState<Tenant[]>([])
   const [leases, setLeases] = useState<Lease[]>([])
-  const [payments, setPayments] = useState<Payment[]>([])
+  const [invoices, setInvoices] = useState<Invoice[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -41,12 +41,12 @@ export default function DashboardPage() {
           propertiesApi.getAll(),
           tenantsApi.getAll(),
           leasesApi.getAll(),
-          paymentsApi.getAll(),
+          invoicesApi.getAll(),
         ])
         if (props.status === 'fulfilled') setProperties(props.value)
         if (tens.status === 'fulfilled') setTenants(tens.value)
         if (ls.status === 'fulfilled') setLeases(ls.value)
-        if (pays.status === 'fulfilled') setPayments(pays.value)
+        if (pays.status === 'fulfilled') setInvoices(pays.value)
       } finally {
         setIsLoading(false)
       }
@@ -56,7 +56,7 @@ export default function DashboardPage() {
   }, [])
 
   const activeLeases = leases.filter((l) => l.status === 'ACTIVE').length
-  const overduePayments = payments.filter((p) => p.status === 'OVERDUE').length
+  const overduePayments = invoices.filter((inv) => inv.status === 'OVERDUE').length
 
   const propertyMap = Object.fromEntries(properties.map((p) => [p.id, p]))
   const tenantMap = Object.fromEntries(tenants.map((t) => [t.id, t]))
@@ -66,7 +66,7 @@ export default function DashboardPage() {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 6)
 
-  const recentPayments = [...payments]
+  const recentInvoices = [...invoices]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 6)
 
@@ -108,7 +108,7 @@ export default function DashboardPage() {
             label="Overdue Payments"
             value={overduePayments}
             icon={CreditCard}
-            href="/payments"
+            href="/invoices"
             colorClass="bg-pink-50 border-pink-100 dark:bg-pink-950/40 dark:border-pink-900"
             iconColorClass="text-pink-600 dark:text-pink-400"
           />
@@ -159,21 +159,21 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold">Recent Payments</CardTitle>
+            <CardTitle className="text-sm font-semibold">Recent Invoices</CardTitle>
           </CardHeader>
           <CardContent>
-            {recentPayments.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-6 text-center">No payments found</p>
+            {recentInvoices.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-6 text-center">No invoices found</p>
             ) : (
               <div className="space-y-1">
-                {recentPayments.map((payment) => {
-                  const tenant = tenantMap[payment.tenantId]
-                  const lease = leaseMap[payment.leaseId]
+                {recentInvoices.map((invoice) => {
+                  const tenant = tenantMap[invoice.tenantId]
+                  const lease = leaseMap[invoice.leaseId]
                   const property = lease ? propertyMap[lease.propertyId] : undefined
                   const unit = property?.units?.find((u) => u.id === lease?.unitId)
                   return (
                     <div
-                      key={payment.id}
+                      key={invoice.invoiceId}
                       className="flex items-center justify-between py-2.5 border-b last:border-0"
                     >
                       <div className="min-w-0">
@@ -184,12 +184,12 @@ export default function DashboardPage() {
                           {property?.name ?? '—'}
                           {unit ? ` · Unit ${unit.unitNumber}` : ''}
                           {' · '}
-                          {formatCurrency(payment.amountDue, currency)}
+                          {formatCurrency(invoice.amountDue, currency)}
                           {' · Due '}
-                          {safeFormat(payment.dueDate, 'MMM d, yyyy')}
+                          {safeFormat(invoice.dueDate, 'MMM d, yyyy')}
                         </p>
                       </div>
-                      <StatusBadge status={payment.status} />
+                      <StatusBadge status={invoice.status} />
                     </div>
                   )
                 })}
