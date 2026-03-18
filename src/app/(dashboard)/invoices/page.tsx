@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, Fragment } from 'react'
 import { CreditCard, ArrowUpDown, X, CircleDollarSign, SlidersHorizontal, Smartphone, ChevronDown, ChevronRight } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatusBadge } from '@/components/shared/StatusBadge'
@@ -325,8 +325,8 @@ export default function InvoicesPage() {
                   const transactions = transactionCache.get(invoice.invoiceId)
 
                   return (
-                    <>
-                      <TableRow key={invoice.invoiceId} className="cursor-pointer hover:bg-muted/40" onClick={() => handleExpandToggle(invoice.invoiceId)}>
+                    <Fragment key={invoice.invoiceId}>
+                      <TableRow className="cursor-pointer hover:bg-muted/40" onClick={() => handleExpandToggle(invoice.invoiceId)}>
                         <TableCell className="pr-0">
                           {isExpanded
                             ? <ChevronDown className="h-4 w-4 text-muted-foreground" />
@@ -439,7 +439,7 @@ export default function InvoicesPage() {
 
                       {/* Expanded transaction history */}
                       {isExpanded && (
-                        <TableRow key={`${invoice.invoiceId}-txns`} className="bg-muted/20 hover:bg-muted/20">
+                        <TableRow className="bg-muted/20 hover:bg-muted/20">
                           <TableCell colSpan={colCount} className="py-0">
                             <div className="px-4 py-3">
                               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
@@ -479,7 +479,7 @@ export default function InvoicesPage() {
                           </TableCell>
                         </TableRow>
                       )}
-                    </>
+                    </Fragment>
                   )
                 })
               )}
