@@ -207,6 +207,42 @@ PropertyType           = 'APARTMENT' | 'HOUSE' | 'COMMERCIAL' | 'CONDO' | 'TOWNH
 
 ---
 
+## Production Deployment
+
+The frontend is deployed to **Vercel** with automatic deployments on every push to `main`. GitHub Actions runs a lint + build gate before Vercel receives the code.
+
+### How it works
+
+```
+Push to main  ─→  GitHub Actions (lint + build)
+                └→  Vercel (auto production deploy)
+
+Open PR        ─→  GitHub Actions (lint + build)
+                └→  Vercel (auto preview deploy)
+```
+
+API calls from the browser go to `/api/v1/...` (same-origin HTTPS). The Next.js server on Vercel proxies those requests to the backend ALB over HTTP server-to-server — this avoids browser mixed-content blocking without requiring HTTPS on the ALB.
+
+### One-time Vercel setup
+
+1. Go to [vercel.com](https://vercel.com) → **Add New Project**
+2. Import `sindiazi/munas-property-manager-ui` from GitHub
+3. Framework: **Next.js** (auto-detected); build command and output dir are defaults
+4. Add environment variable:
+   - **Name:** `BACKEND_URL`
+   - **Value:** the backend ALB URL (HTTP)
+   - **Environment:** Production (and Preview if preview deploys should hit the backend)
+5. Click **Deploy**
+
+### Environment variables
+
+| Variable | Where set | Purpose |
+|----------|-----------|---------|
+| `BACKEND_URL` | Vercel dashboard only (never committed) | Backend URL for server-side rewrite proxy |
+| `NEXT_PUBLIC_API_URL` | `.env.local` (dev only) | Dev: `http://localhost:8080`; Production: empty (uses rewrite proxy) |
+
+---
+
 ## Available Scripts
 
 ```bash
